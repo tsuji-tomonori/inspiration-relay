@@ -1,6 +1,6 @@
 # API・インフラ docs 自動生成と CI/CD 導入
 
-状態: in_progress
+状態: done
 
 ## 背景
 
@@ -46,14 +46,14 @@
 
 ## 受け入れ条件
 
-- [ ] API docs 生成コマンドで OpenAPI JSON と Markdown が生成される。
-- [ ] infra docs 生成コマンドで CDK 構成の inventory JSON と Markdown が生成される。
-- [ ] docs check コマンドで生成物の drift を検出できる。
-- [ ] GitHub Actions workflow が CI と docs check と CDK synth を実行する。
-- [ ] README にローカル実行手順と CI/CD の扱いが記載される。
-- [ ] 関連する typecheck / test / build / docs check が pass する。
-- [ ] 作業完了レポートを `reports/working/` に保存する。
-- [ ] PR 作成後、受け入れ条件確認コメントとセルフレビューコメントを日本語で投稿する。
+- [x] API docs 生成コマンドで OpenAPI JSON と Markdown が生成される。
+- [x] infra docs 生成コマンドで CDK 構成の inventory JSON と Markdown が生成される。
+- [x] docs check コマンドで生成物の drift を検出できる。
+- [x] GitHub Actions workflow が CI と docs check と CDK synth を実行する。
+- [x] README にローカル実行手順と CI/CD の扱いが記載される。
+- [x] 関連する typecheck / test / build / docs check が pass する。
+- [x] 作業完了レポートを `reports/working/` に保存する。
+- [x] PR 作成後、受け入れ条件確認コメントとセルフレビューコメントを日本語で投稿する。
 
 ## 検証計画
 
@@ -77,3 +77,10 @@
 
 - `rag-assist` の workflow は大規模なため、現行プロジェクトには必要最小限へ縮小して取り込む。
 - GitHub Secrets / AWS OIDC はこの作業では設定できないため、deploy は手動 workflow として追加するか README に未設定条件を明記する。
+
+## 完了メモ
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/2
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/2#issuecomment-4467246202
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/2#issuecomment-4467246175
+- 作業レポート: `reports/working/20260517-0016-import-rag-assist-ci-docs.md`
