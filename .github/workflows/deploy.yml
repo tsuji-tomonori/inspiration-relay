@@ -1,0 +1,93 @@
+name: Deploy Hirameki Relay
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: GitHub environment name used for deployment approvals and secrets.
+        required: true
+        type: choice
+        options:
+          - dev
+        default: dev
+      aws-region:
+        description: AWS region to deploy into.
+        required: true
+        default: ap-northeast-1
+      bootstrap:
+        description: Run cdk bootstrap before deploy. Use only for first-time setup.
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: hirameki-relay-deploy-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: CDK deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    timeout-minutes: 45
+    env:
+      AWS_REGION: ${{ inputs.aws-region }}
+      CDK_DEFAULT_REGION: ${{ inputs.aws-region }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate deploy inputs
+        run: |
+          set -euo pipefail
+          [[ "$AWS_REGION" =~ ^[a-z]{2}-[a-z]+-[0-9]$ ]] || { echo "Invalid aws-region"; exit 1; }
+          [[ "${{ inputs.environment }}" =~ ^(dev)$ ]] || { echo "Invalid environment"; exit 1; }
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Build deployment artifacts
+        run: npm run build
+
+      - name: CDK bootstrap
+        if: ${{ inputs.bootstrap }}
+        run: npm exec -w @hirameki-relay/infra -- cdk bootstrap
+
+      - name: Synthesize CloudFormation YAML
+        run: |
+          mkdir -p infra/cdk.out
+          npm run cdk:synth > infra/cdk.out/HiramekiRelayStack.template.yaml
+
+      - name: Upload synth artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hirameki-relay-cdk-synth-${{ inputs.environment }}
+          path: infra/cdk.out/HiramekiRelayStack.template.yaml
+          if-no-files-found: error
+
+      - name: CDK deploy
+        run: npm exec -w @hirameki-relay/infra -- cdk deploy --require-approval never --outputs-file cdk-outputs.json
+
+      - name: Upload deployment outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: hirameki-relay-cdk-outputs-${{ inputs.environment }}
+          path: infra/cdk-outputs.json
+          if-no-files-found: error

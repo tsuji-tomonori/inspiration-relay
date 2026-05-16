@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "docs:infra": "npm run build -w @hirameki-relay/api && tsx scripts/generate-infra-docs.ts",
+    "docs:infra:check": "npm run build -w @hirameki-relay/api && tsx scripts/generate-infra-docs.ts --check",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "synth": "npm run build -w @hirameki-relay/api && cdk synth",
     "test": "npm run build -w @hirameki-relay/api && vitest run"
@@ -14,6 +16,7 @@
     "constructs": "^10.4.2"
   },
   "devDependencies": {
+    "aws-cdk": "^2.173.0",
     "esbuild": "^0.24.2",
     "tsx": "^4.19.2",
     "vitest": "^2.1.8"

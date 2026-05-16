@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
+import { openApiDocument } from "./openapi";
 import { ApiError, GameService } from "./service";
 import { MemoryRoomRepository } from "./store";
 
@@ -17,6 +18,8 @@ export function createApp(service = gameService): Hono {
   }));
 
   app.get("/health", (context) => context.json({ ok: true }));
+  app.get("/openapi.json", (context) => context.json(openApiDocument));
+  app.get("/api/openapi.json", (context) => context.json(openApiDocument));
 
   app.post("/api/v1/rooms", async (context) => {
     const body = await context.req.json<{ nickname: string; avatarId: string }>();

@@ -8,6 +8,8 @@
   "scripts": {
     "dev": "node --import tsx src/dev.ts",
     "build": "tsc -p tsconfig.json && esbuild src/handler.ts src/ws-handler.ts --bundle --platform=node --target=node22 --format=cjs --outdir=dist --external:@aws-sdk/*",
+    "docs:api": "tsx src/generate-api-docs.ts",
+    "docs:api:check": "tsx src/generate-api-docs.ts --check",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run"
   },

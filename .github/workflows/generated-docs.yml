@@ -1,0 +1,65 @@
+name: Generate API and Infra Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/generated-docs.yml"
+      - "apps/api/**"
+      - "infra/**"
+      - "packages/shared/**"
+      - "package.json"
+      - "package-lock.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: hirameki-relay-generated-docs-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    name: Generate docs and open a PR when changed
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate API and infra docs
+        run: |
+          npm run docs:api
+          npm run docs:infra
+          npm run docs:check
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: chore/generated-docs
+          delete-branch: true
+          commit-message: "📝 docs: API・インフラ生成ドキュメントを更新"
+          title: "API・インフラ生成ドキュメントを更新"
+          body: |
+            API と CDK stack から生成されるドキュメントを更新します。
+
+            ### 生成コマンド
+
+            - `npm run docs:api`
+            - `npm run docs:infra`
+            - `npm run docs:check`
+          add-paths: |
+            docs/api
+            docs/infra

@@ -1,0 +1,56 @@
+name: Hirameki Relay CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hirameki-relay-ci-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Docs, type-check, test, build, and synth
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check generated API and infra docs
+        run: npm run docs:check
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Synthesize CDK template
+        run: |
+          mkdir -p infra/cdk.out
+          npm run cdk:synth > infra/cdk.out/HiramekiRelayStack.template.yaml
+
+      - name: Upload CDK synth artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: hirameki-relay-cdk-synth
+          path: infra/cdk.out/HiramekiRelayStack.template.yaml
+          if-no-files-found: warn
