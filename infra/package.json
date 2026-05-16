@@ -1,0 +1,21 @@
+{
+  "name": "@hirameki-relay/infra",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "synth": "npm run build -w @hirameki-relay/api && cdk synth",
+    "test": "npm run build -w @hirameki-relay/api && vitest run"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.173.0",
+    "constructs": "^10.4.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.2",
+    "tsx": "^4.19.2",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,1740 @@
+{
+  "source": "Generated asset sheet with chroma-key green background",
+  "image_size": {
+    "width": 1448,
+    "height": 1086
+  },
+  "background_removal": "Chroma-key green removed; transparent PNGs generated.",
+  "folders": {
+    "sheets": "Full source sheet and transparent sheet",
+    "components": "Automatically extracted individual connected components",
+    "grouped_assets": "Curated logical crops such as mascot+label and button/panel groups",
+    "previews": "Preview images"
+  },
+  "components": [
+    {
+      "id": 1,
+      "name": "logo_hirameki_relay",
+      "file": "components/001_logo_hirameki_relay.png",
+      "bbox": {
+        "x0": 13,
+        "y0": 3,
+        "x1": 586,
+        "y1": 149
+      },
+      "area_px": 47610,
+      "width": 573,
+      "height": 146
+    },
+    {
+      "id": 2,
+      "name": "icon_lightbulb",
+      "file": "components/002_icon_lightbulb.png",
+      "bbox": {
+        "x0": 605,
+        "y0": 10,
+        "x1": 687,
+        "y1": 133
+      },
+      "area_px": 4239,
+      "width": 82,
+      "height": 123
+    },
+    {
+      "id": 3,
+      "name": "icon_baton_pink",
+      "file": "components/003_icon_baton_pink.png",
+      "bbox": {
+        "x0": 828,
+        "y0": 29,
+        "x1": 929,
+        "y1": 134
+      },
+      "area_px": 3243,
+      "width": 101,
+      "height": 105
+    },
+    {
+      "id": 4,
+      "name": "icon_gear",
+      "file": "components/004_icon_gear.png",
+      "bbox": {
+        "x0": 1220,
+        "y0": 31,
+        "x1": 1311,
+        "y1": 123
+      },
+      "area_px": 3991,
+      "width": 91,
+      "height": 92
+    },
+    {
+      "id": 5,
+      "name": "icon_chat_bubble",
+      "file": "components/005_icon_chat_bubble.png",
+      "bbox": {
+        "x0": 1094,
+        "y0": 32,
+        "x1": 1194,
+        "y1": 123
+      },
+      "area_px": 4397,
+      "width": 100,
+      "height": 91
+    },
+    {
+      "id": 6,
+      "name": "icon_heart",
+      "file": "components/006_icon_heart.png",
+      "bbox": {
+        "x0": 733,
+        "y0": 35,
+        "x1": 827,
+        "y1": 122
+      },
+      "area_px": 3613,
+      "width": 94,
+      "height": 87
+    },
+    {
+      "id": 7,
+      "name": "icon_people",
+      "file": "components/007_icon_people.png",
+      "bbox": {
+        "x0": 963,
+        "y0": 35,
+        "x1": 1065,
+        "y1": 122
+      },
+      "area_px": 4411,
+      "width": 102,
+      "height": 87
+    },
+    {
+      "id": 8,
+      "name": "icon_crown",
+      "file": "components/008_icon_crown.png",
+      "bbox": {
+        "x0": 729,
+        "y0": 130,
+        "x1": 832,
+        "y1": 221
+      },
+      "area_px": 4078,
+      "width": 103,
+      "height": 91
+    },
+    {
+      "id": 9,
+      "name": "icon_trophy",
+      "file": "components/009_icon_trophy.png",
+      "bbox": {
+        "x0": 826,
+        "y0": 130,
+        "x1": 934,
+        "y1": 229
+      },
+      "area_px": 4781,
+      "width": 108,
+      "height": 99
+    },
+    {
+      "id": 10,
+      "name": "icon_medal_3",
+      "file": "components/010_icon_medal_3.png",
+      "bbox": {
+        "x0": 937,
+        "y0": 130,
+        "x1": 1011,
+        "y1": 229
+      },
+      "area_px": 3574,
+      "width": 74,
+      "height": 99
+    },
+    {
+      "id": 11,
+      "name": "decor_sparkle_yellow_large",
+      "file": "components/011_decor_sparkle_yellow_large.png",
+      "bbox": {
+        "x0": 1027,
+        "y0": 130,
+        "x1": 1088,
+        "y1": 201
+      },
+      "area_px": 994,
+      "width": 61,
+      "height": 71
+    },
+    {
+      "id": 12,
+      "name": "decor_confetti_blue",
+      "file": "components/012_decor_confetti_blue.png",
+      "bbox": {
+        "x0": 1278,
+        "y0": 131,
+        "x1": 1322,
+        "y1": 179
+      },
+      "area_px": 495,
+      "width": 44,
+      "height": 48
+    },
+    {
+      "id": 13,
+      "name": "decor_confetti_yellow_diamond",
+      "file": "components/013_decor_confetti_yellow_diamond.png",
+      "bbox": {
+        "x0": 1333,
+        "y0": 130,
+        "x1": 1380,
+        "y1": 179
+      },
+      "area_px": 461,
+      "width": 47,
+      "height": 49
+    },
+    {
+      "id": 14,
+      "name": "decor_dot_yellow",
+      "file": "components/014_decor_dot_yellow.png",
+      "bbox": {
+        "x0": 1190,
+        "y0": 140,
+        "x1": 1228,
+        "y1": 179
+      },
+      "area_px": 276,
+      "width": 38,
+      "height": 39
+    },
+    {
+      "id": 15,
+      "name": "decor_star_pink",
+      "file": "components/015_decor_star_pink.png",
+      "bbox": {
+        "x0": 1107,
+        "y0": 150,
+        "x1": 1170,
+        "y1": 216
+      },
+      "area_px": 1241,
+      "width": 63,
+      "height": 66
+    },
+    {
+      "id": 16,
+      "name": "mascot_bunny",
+      "file": "components/016_mascot_bunny.png",
+      "bbox": {
+        "x0": 149,
+        "y0": 153,
+        "x1": 293,
+        "y1": 305
+      },
+      "area_px": 10777,
+      "width": 144,
+      "height": 152
+    },
+    {
+      "id": 17,
+      "name": "decor_confetti_pink_curve",
+      "file": "components/017_decor_confetti_pink_curve.png",
+      "bbox": {
+        "x0": 1365,
+        "y0": 161,
+        "x1": 1412,
+        "y1": 214
+      },
+      "area_px": 557,
+      "width": 47,
+      "height": 53
+    },
+    {
+      "id": 18,
+      "name": "mascot_ghost",
+      "file": "components/018_mascot_ghost.png",
+      "bbox": {
+        "x0": 10,
+        "y0": 166,
+        "x1": 160,
+        "y1": 304
+      },
+      "area_px": 10932,
+      "width": 150,
+      "height": 138
+    },
+    {
+      "id": 19,
+      "name": "mascot_cat",
+      "file": "components/019_mascot_cat.png",
+      "bbox": {
+        "x0": 280,
+        "y0": 169,
+        "x1": 409,
+        "y1": 302
+      },
+      "area_px": 8737,
+      "width": 129,
+      "height": 133
+    },
+    {
+      "id": 20,
+      "name": "decor_star_blue",
+      "file": "components/020_decor_star_blue.png",
+      "bbox": {
+        "x0": 1205,
+        "y0": 174,
+        "x1": 1266,
+        "y1": 234
+      },
+      "area_px": 1058,
+      "width": 61,
+      "height": 60
+    },
+    {
+      "id": 21,
+      "name": "mascot_penguin",
+      "file": "components/021_mascot_penguin.png",
+      "bbox": {
+        "x0": 399,
+        "y0": 176,
+        "x1": 525,
+        "y1": 301
+      },
+      "area_px": 8426,
+      "width": 126,
+      "height": 125
+    },
+    {
+      "id": 22,
+      "name": "decor_dot_purple",
+      "file": "components/022_decor_dot_purple.png",
+      "bbox": {
+        "x0": 1307,
+        "y0": 178,
+        "x1": 1348,
+        "y1": 219
+      },
+      "area_px": 354,
+      "width": 41,
+      "height": 41
+    },
+    {
+      "id": 23,
+      "name": "mascot_frog",
+      "file": "components/023_mascot_frog.png",
+      "bbox": {
+        "x0": 599,
+        "y0": 182,
+        "x1": 700,
+        "y1": 302
+      },
+      "area_px": 6547,
+      "width": 101,
+      "height": 120
+    },
+    {
+      "id": 24,
+      "name": "decor_sparkle_pink_small",
+      "file": "components/024_decor_sparkle_pink_small.png",
+      "bbox": {
+        "x0": 1072,
+        "y0": 185,
+        "x1": 1122,
+        "y1": 236
+      },
+      "area_px": 532,
+      "width": 50,
+      "height": 51
+    },
+    {
+      "id": 25,
+      "name": "mascot_chick",
+      "file": "components/025_mascot_chick.png",
+      "bbox": {
+        "x0": 505,
+        "y0": 186,
+        "x1": 610,
+        "y1": 302
+      },
+      "area_px": 6129,
+      "width": 105,
+      "height": 116
+    },
+    {
+      "id": 26,
+      "name": "decor_confetti_purple_curve",
+      "file": "components/026_decor_confetti_purple_curve.png",
+      "bbox": {
+        "x0": 1353,
+        "y0": 200,
+        "x1": 1395,
+        "y1": 246
+      },
+      "area_px": 378,
+      "width": 42,
+      "height": 46
+    },
+    {
+      "id": 27,
+      "name": "decor_square_yellow",
+      "file": "components/027_decor_square_yellow.png",
+      "bbox": {
+        "x0": 1269,
+        "y0": 205,
+        "x1": 1311,
+        "y1": 248
+      },
+      "area_px": 469,
+      "width": 42,
+      "height": 43
+    },
+    {
+      "id": 28,
+      "name": "decor_sparkle_green",
+      "file": "components/028_decor_sparkle_green.png",
+      "bbox": {
+        "x0": 1137,
+        "y0": 213,
+        "x1": 1190,
+        "y1": 270
+      },
+      "area_px": 624,
+      "width": 53,
+      "height": 57
+    },
+    {
+      "id": 29,
+      "name": "decor_bunting_flags",
+      "file": "components/029_decor_bunting_flags.png",
+      "bbox": {
+        "x0": 1015,
+        "y0": 221,
+        "x1": 1430,
+        "y1": 338
+      },
+      "area_px": 12467,
+      "width": 415,
+      "height": 117
+    },
+    {
+      "id": 30,
+      "name": "cloud_white",
+      "file": "components/030_cloud_white.png",
+      "bbox": {
+        "x0": 717,
+        "y0": 222,
+        "x1": 819,
+        "y1": 311
+      },
+      "area_px": 4213,
+      "width": 102,
+      "height": 89
+    },
+    {
+      "id": 31,
+      "name": "cloud_lavender",
+      "file": "components/031_cloud_lavender.png",
+      "bbox": {
+        "x0": 911,
+        "y0": 224,
+        "x1": 1008,
+        "y1": 311
+      },
+      "area_px": 3838,
+      "width": 97,
+      "height": 87
+    },
+    {
+      "id": 32,
+      "name": "cloud_pink",
+      "file": "components/032_cloud_pink.png",
+      "bbox": {
+        "x0": 823,
+        "y0": 233,
+        "x1": 910,
+        "y1": 310
+      },
+      "area_px": 2876,
+      "width": 87,
+      "height": 77
+    },
+    {
+      "id": 33,
+      "name": "label_obake",
+      "file": "components/033_label_obake.png",
+      "bbox": {
+        "x0": 30,
+        "y0": 298,
+        "x1": 130,
+        "y1": 350
+      },
+      "area_px": 2372,
+      "width": 100,
+      "height": 52
+    },
+    {
+      "id": 34,
+      "name": "label_usagi",
+      "file": "components/034_label_usagi.png",
+      "bbox": {
+        "x0": 161,
+        "y0": 298,
+        "x1": 261,
+        "y1": 350
+      },
+      "area_px": 2379,
+      "width": 100,
+      "height": 52
+    },
+    {
+      "id": 35,
+      "name": "label_neko",
+      "file": "components/035_label_neko.png",
+      "bbox": {
+        "x0": 292,
+        "y0": 298,
+        "x1": 385,
+        "y1": 350
+      },
+      "area_px": 2142,
+      "width": 93,
+      "height": 52
+    },
+    {
+      "id": 36,
+      "name": "label_penguin",
+      "file": "components/036_label_penguin.png",
+      "bbox": {
+        "x0": 408,
+        "y0": 298,
+        "x1": 511,
+        "y1": 350
+      },
+      "area_px": 2444,
+      "width": 103,
+      "height": 52
+    },
+    {
+      "id": 37,
+      "name": "label_hiyoko",
+      "file": "components/037_label_hiyoko.png",
+      "bbox": {
+        "x0": 511,
+        "y0": 298,
+        "x1": 604,
+        "y1": 350
+      },
+      "area_px": 2136,
+      "width": 93,
+      "height": 52
+    },
+    {
+      "id": 38,
+      "name": "label_kaeru",
+      "file": "components/038_label_kaeru.png",
+      "bbox": {
+        "x0": 605,
+        "y0": 298,
+        "x1": 696,
+        "y1": 350
+      },
+      "area_px": 2101,
+      "width": 91,
+      "height": 52
+    },
+    {
+      "id": 39,
+      "name": "arrow_right_pink",
+      "file": "components/039_arrow_right_pink.png",
+      "bbox": {
+        "x0": 715,
+        "y0": 305,
+        "x1": 791,
+        "y1": 378
+      },
+      "area_px": 1866,
+      "width": 76,
+      "height": 73
+    },
+    {
+      "id": 40,
+      "name": "arrow_left_purple",
+      "file": "components/040_arrow_left_purple.png",
+      "bbox": {
+        "x0": 786,
+        "y0": 305,
+        "x1": 864,
+        "y1": 378
+      },
+      "area_px": 1907,
+      "width": 78,
+      "height": 73
+    },
+    {
+      "id": 41,
+      "name": "arrow_up_blue",
+      "file": "components/041_arrow_up_blue.png",
+      "bbox": {
+        "x0": 870,
+        "y0": 305,
+        "x1": 941,
+        "y1": 379
+      },
+      "area_px": 1745,
+      "width": 71,
+      "height": 74
+    },
+    {
+      "id": 42,
+      "name": "arrow_down_green",
+      "file": "components/042_arrow_down_green.png",
+      "bbox": {
+        "x0": 938,
+        "y0": 305,
+        "x1": 1009,
+        "y1": 379
+      },
+      "area_px": 1790,
+      "width": 71,
+      "height": 74
+    },
+    {
+      "id": 43,
+      "name": "room_id_field",
+      "file": "components/043_room_id_field.png",
+      "bbox": {
+        "x0": 1020,
+        "y0": 332,
+        "x1": 1410,
+        "y1": 408
+      },
+      "area_px": 19448,
+      "width": 390,
+      "height": 76
+    },
+    {
+      "id": 44,
+      "name": "button_create_room",
+      "file": "components/044_button_create_room.png",
+      "bbox": {
+        "x0": 12,
+        "y0": 364,
+        "x1": 374,
+        "y1": 518
+      },
+      "area_px": 43566,
+      "width": 362,
+      "height": 154
+    },
+    {
+      "id": 45,
+      "name": "button_join_room",
+      "file": "components/045_button_join_room.png",
+      "bbox": {
+        "x0": 366,
+        "y0": 364,
+        "x1": 710,
+        "y1": 516
+      },
+      "area_px": 40536,
+      "width": 344,
+      "height": 152
+    },
+    {
+      "id": 46,
+      "name": "object_pancakes",
+      "file": "components/046_object_pancakes.png",
+      "bbox": {
+        "x0": 707,
+        "y0": 384,
+        "x1": 922,
+        "y1": 545
+      },
+      "area_px": 21182,
+      "width": 215,
+      "height": 161
+    },
+    {
+      "id": 47,
+      "name": "word_badge_amai",
+      "file": "components/047_word_badge_amai.png",
+      "bbox": {
+        "x0": 918,
+        "y0": 415,
+        "x1": 1038,
+        "y1": 508
+      },
+      "area_px": 6090,
+      "width": 120,
+      "height": 93
+    },
+    {
+      "id": 48,
+      "name": "word_badge_marui",
+      "file": "components/048_word_badge_marui.png",
+      "bbox": {
+        "x0": 1032,
+        "y0": 415,
+        "x1": 1150,
+        "y1": 508
+      },
+      "area_px": 5892,
+      "width": 118,
+      "height": 93
+    },
+    {
+      "id": 49,
+      "name": "word_badge_yaku",
+      "file": "components/049_word_badge_yaku.png",
+      "bbox": {
+        "x0": 1144,
+        "y0": 415,
+        "x1": 1250,
+        "y1": 508
+      },
+      "area_px": 5151,
+      "width": 106,
+      "height": 93
+    },
+    {
+      "id": 50,
+      "name": "word_badge_asagohan",
+      "file": "components/050_word_badge_asagohan.png",
+      "bbox": {
+        "x0": 1242,
+        "y0": 415,
+        "x1": 1393,
+        "y1": 509
+      },
+      "area_px": 8034,
+      "width": 151,
+      "height": 94
+    },
+    {
+      "id": 51,
+      "name": "button_game_start",
+      "file": "components/051_button_game_start.png",
+      "bbox": {
+        "x0": 8,
+        "y0": 518,
+        "x1": 570,
+        "y1": 655
+      },
+      "area_px": 60857,
+      "width": 562,
+      "height": 137
+    },
+    {
+      "id": 52,
+      "name": "timer_62_seconds",
+      "file": "components/052_timer_62_seconds.png",
+      "bbox": {
+        "x0": 870,
+        "y0": 523,
+        "x1": 991,
+        "y1": 646
+      },
+      "area_px": 8484,
+      "width": 121,
+      "height": 123
+    },
+    {
+      "id": 53,
+      "name": "score_badge_260pt",
+      "file": "components/053_score_badge_260pt.png",
+      "bbox": {
+        "x0": 986,
+        "y0": 524,
+        "x1": 1101,
+        "y1": 642
+      },
+      "area_px": 7500,
+      "width": 115,
+      "height": 118
+    },
+    {
+      "id": 54,
+      "name": "score_badge_210pt",
+      "file": "components/054_score_badge_210pt.png",
+      "bbox": {
+        "x0": 1093,
+        "y0": 524,
+        "x1": 1208,
+        "y1": 642
+      },
+      "area_px": 7483,
+      "width": 115,
+      "height": 118
+    },
+    {
+      "id": 55,
+      "name": "score_badge_180pt",
+      "file": "components/055_score_badge_180pt.png",
+      "bbox": {
+        "x0": 1200,
+        "y0": 525,
+        "x1": 1313,
+        "y1": 642
+      },
+      "area_px": 7205,
+      "width": 113,
+      "height": 117
+    },
+    {
+      "id": 56,
+      "name": "score_badge_130pt",
+      "file": "components/056_score_badge_130pt.png",
+      "bbox": {
+        "x0": 1305,
+        "y0": 525,
+        "x1": 1418,
+        "y1": 642
+      },
+      "area_px": 7154,
+      "width": 113,
+      "height": 117
+    },
+    {
+      "id": 57,
+      "name": "mascot_chick_flag",
+      "file": "components/057_mascot_chick_flag.png",
+      "bbox": {
+        "x0": 571,
+        "y0": 535,
+        "x1": 713,
+        "y1": 655
+      },
+      "area_px": 7592,
+      "width": 142,
+      "height": 120
+    },
+    {
+      "id": 58,
+      "name": "button_decide_blue",
+      "file": "components/058_button_decide_blue.png",
+      "bbox": {
+        "x0": 475,
+        "y0": 646,
+        "x1": 602,
+        "y1": 771
+      },
+      "area_px": 9214,
+      "width": 127,
+      "height": 125
+    },
+    {
+      "id": 59,
+      "name": "panel_pink_bunting",
+      "file": "components/059_panel_pink_bunting.png",
+      "bbox": {
+        "x0": 638,
+        "y0": 647,
+        "x1": 1025,
+        "y1": 823
+      },
+      "area_px": 57094,
+      "width": 387,
+      "height": 176
+    },
+    {
+      "id": 60,
+      "name": "panel_lavender",
+      "file": "components/060_panel_lavender.png",
+      "bbox": {
+        "x0": 1030,
+        "y0": 647,
+        "x1": 1414,
+        "y1": 823
+      },
+      "area_px": 56353,
+      "width": 384,
+      "height": 176
+    },
+    {
+      "id": 61,
+      "name": "button_next_round",
+      "file": "components/061_button_next_round.png",
+      "bbox": {
+        "x0": 15,
+        "y0": 649,
+        "x1": 457,
+        "y1": 765
+      },
+      "area_px": 39035,
+      "width": 442,
+      "height": 116
+    },
+    {
+      "id": 62,
+      "name": "tab_ranking",
+      "file": "components/062_tab_ranking.png",
+      "bbox": {
+        "x0": 16,
+        "y0": 776,
+        "x1": 168,
+        "y1": 842
+      },
+      "area_px": 5634,
+      "width": 152,
+      "height": 66
+    },
+    {
+      "id": 63,
+      "name": "tab_settings",
+      "file": "components/063_tab_settings.png",
+      "bbox": {
+        "x0": 168,
+        "y0": 776,
+        "x1": 291,
+        "y1": 841
+      },
+      "area_px": 4300,
+      "width": 123,
+      "height": 65
+    },
+    {
+      "id": 64,
+      "name": "tab_how_to_play",
+      "file": "components/064_tab_how_to_play.png",
+      "bbox": {
+        "x0": 294,
+        "y0": 776,
+        "x1": 450,
+        "y1": 841
+      },
+      "area_px": 5776,
+      "width": 156,
+      "height": 65
+    },
+    {
+      "id": 65,
+      "name": "tab_chat",
+      "file": "components/065_tab_chat.png",
+      "bbox": {
+        "x0": 454,
+        "y0": 776,
+        "x1": 594,
+        "y1": 841
+      },
+      "area_px": 5049,
+      "width": 140,
+      "height": 65
+    },
+    {
+      "id": 66,
+      "name": "panel_cream_lightbulb",
+      "file": "components/066_panel_cream_lightbulb.png",
+      "bbox": {
+        "x0": 1033,
+        "y0": 820,
+        "x1": 1416,
+        "y1": 1021
+      },
+      "area_px": 60932,
+      "width": 383,
+      "height": 201
+    },
+    {
+      "id": 67,
+      "name": "panel_mint",
+      "file": "components/067_panel_mint.png",
+      "bbox": {
+        "x0": 640,
+        "y0": 831,
+        "x1": 1024,
+        "y1": 1020
+      },
+      "area_px": 61071,
+      "width": 384,
+      "height": 189
+    },
+    {
+      "id": 68,
+      "name": "chip_host",
+      "file": "components/068_chip_host.png",
+      "bbox": {
+        "x0": 19,
+        "y0": 853,
+        "x1": 127,
+        "y1": 911
+      },
+      "area_px": 3067,
+      "width": 108,
+      "height": 58
+    },
+    {
+      "id": 69,
+      "name": "chip_inputting",
+      "file": "components/069_chip_inputting.png",
+      "bbox": {
+        "x0": 132,
+        "y0": 853,
+        "x1": 244,
+        "y1": 910
+      },
+      "area_px": 3111,
+      "width": 112,
+      "height": 57
+    },
+    {
+      "id": 70,
+      "name": "chip_yosshi",
+      "file": "components/070_chip_yosshi.png",
+      "bbox": {
+        "x0": 248,
+        "y0": 853,
+        "x1": 365,
+        "y1": 910
+      },
+      "area_px": 3334,
+      "width": 117,
+      "height": 57
+    },
+    {
+      "id": 71,
+      "name": "chip_waiting",
+      "file": "components/071_chip_waiting.png",
+      "bbox": {
+        "x0": 369,
+        "y0": 853,
+        "x1": 500,
+        "y1": 911
+      },
+      "area_px": 3837,
+      "width": 131,
+      "height": 58
+    },
+    {
+      "id": 72,
+      "name": "chip_theme",
+      "file": "components/072_chip_theme.png",
+      "bbox": {
+        "x0": 504,
+        "y0": 853,
+        "x1": 608,
+        "y1": 910
+      },
+      "area_px": 2871,
+      "width": 104,
+      "height": 57
+    },
+    {
+      "id": 73,
+      "name": "rank_medal_1",
+      "file": "components/073_rank_medal_1.png",
+      "bbox": {
+        "x0": 367,
+        "y0": 916,
+        "x1": 437,
+        "y1": 1009
+      },
+      "area_px": 2823,
+      "width": 70,
+      "height": 93
+    },
+    {
+      "id": 74,
+      "name": "rank_medal_2",
+      "file": "components/074_rank_medal_2.png",
+      "bbox": {
+        "x0": 430,
+        "y0": 917,
+        "x1": 500,
+        "y1": 1009
+      },
+      "area_px": 2669,
+      "width": 70,
+      "height": 92
+    },
+    {
+      "id": 75,
+      "name": "rank_medal_3",
+      "file": "components/075_rank_medal_3.png",
+      "bbox": {
+        "x0": 492,
+        "y0": 917,
+        "x1": 563,
+        "y1": 1009
+      },
+      "area_px": 2670,
+      "width": 71,
+      "height": 92
+    },
+    {
+      "id": 76,
+      "name": "number_badge_1",
+      "file": "components/076_number_badge_1.png",
+      "bbox": {
+        "x0": 14,
+        "y0": 925,
+        "x1": 84,
+        "y1": 999
+      },
+      "area_px": 2133,
+      "width": 70,
+      "height": 74
+    },
+    {
+      "id": 77,
+      "name": "number_badge_2",
+      "file": "components/077_number_badge_2.png",
+      "bbox": {
+        "x0": 71,
+        "y0": 924,
+        "x1": 139,
+        "y1": 997
+      },
+      "area_px": 2016,
+      "width": 68,
+      "height": 73
+    },
+    {
+      "id": 78,
+      "name": "number_badge_3",
+      "file": "components/078_number_badge_3.png",
+      "bbox": {
+        "x0": 127,
+        "y0": 925,
+        "x1": 196,
+        "y1": 997
+      },
+      "area_px": 2038,
+      "width": 69,
+      "height": 72
+    },
+    {
+      "id": 79,
+      "name": "number_badge_4",
+      "file": "components/079_number_badge_4.png",
+      "bbox": {
+        "x0": 183,
+        "y0": 925,
+        "x1": 253,
+        "y1": 997
+      },
+      "area_px": 2062,
+      "width": 70,
+      "height": 72
+    },
+    {
+      "id": 80,
+      "name": "number_badge_5",
+      "file": "components/080_number_badge_5.png",
+      "bbox": {
+        "x0": 240,
+        "y0": 925,
+        "x1": 309,
+        "y1": 997
+      },
+      "area_px": 2039,
+      "width": 69,
+      "height": 72
+    },
+    {
+      "id": 81,
+      "name": "number_badge_6",
+      "file": "components/081_number_badge_6.png",
+      "bbox": {
+        "x0": 297,
+        "y0": 925,
+        "x1": 366,
+        "y1": 997
+      },
+      "area_px": 2060,
+      "width": 69,
+      "height": 72
+    },
+    {
+      "id": 82,
+      "name": "number_badge_4_white",
+      "file": "components/082_number_badge_4_white.png",
+      "bbox": {
+        "x0": 561,
+        "y0": 926,
+        "x1": 634,
+        "y1": 1002
+      },
+      "area_px": 2417,
+      "width": 73,
+      "height": 76
+    }
+  ],
+  "grouped_assets": [
+    {
+      "id": 1,
+      "name": "logo_hirameki_relay",
+      "file": "grouped_assets/01_logo_hirameki_relay.png",
+      "component_ids": [
+        1
+      ],
+      "bbox": {
+        "x0": 13,
+        "y0": 3,
+        "x1": 586,
+        "y1": 149
+      },
+      "width": 573,
+      "height": 146
+    },
+    {
+      "id": 2,
+      "name": "mascot_ghost_with_label",
+      "file": "grouped_assets/02_mascot_ghost_with_label.png",
+      "component_ids": [
+        18,
+        33
+      ],
+      "bbox": {
+        "x0": 10,
+        "y0": 166,
+        "x1": 160,
+        "y1": 350
+      },
+      "width": 150,
+      "height": 184
+    },
+    {
+      "id": 3,
+      "name": "mascot_bunny_with_label",
+      "file": "grouped_assets/03_mascot_bunny_with_label.png",
+      "component_ids": [
+        16,
+        34
+      ],
+      "bbox": {
+        "x0": 149,
+        "y0": 153,
+        "x1": 293,
+        "y1": 350
+      },
+      "width": 144,
+      "height": 197
+    },
+    {
+      "id": 4,
+      "name": "mascot_cat_with_label",
+      "file": "grouped_assets/04_mascot_cat_with_label.png",
+      "component_ids": [
+        19,
+        35
+      ],
+      "bbox": {
+        "x0": 280,
+        "y0": 169,
+        "x1": 409,
+        "y1": 350
+      },
+      "width": 129,
+      "height": 181
+    },
+    {
+      "id": 5,
+      "name": "mascot_penguin_with_label",
+      "file": "grouped_assets/05_mascot_penguin_with_label.png",
+      "component_ids": [
+        21,
+        36
+      ],
+      "bbox": {
+        "x0": 399,
+        "y0": 176,
+        "x1": 525,
+        "y1": 350
+      },
+      "width": 126,
+      "height": 174
+    },
+    {
+      "id": 6,
+      "name": "mascot_chick_with_label",
+      "file": "grouped_assets/06_mascot_chick_with_label.png",
+      "component_ids": [
+        25,
+        37
+      ],
+      "bbox": {
+        "x0": 505,
+        "y0": 186,
+        "x1": 610,
+        "y1": 350
+      },
+      "width": 105,
+      "height": 164
+    },
+    {
+      "id": 7,
+      "name": "mascot_frog_with_label",
+      "file": "grouped_assets/07_mascot_frog_with_label.png",
+      "component_ids": [
+        23,
+        38
+      ],
+      "bbox": {
+        "x0": 599,
+        "y0": 182,
+        "x1": 700,
+        "y1": 350
+      },
+      "width": 101,
+      "height": 168
+    },
+    {
+      "id": 8,
+      "name": "characters_all_with_labels",
+      "file": "grouped_assets/08_characters_all_with_labels.png",
+      "component_ids": [
+        18,
+        33,
+        16,
+        34,
+        19,
+        35,
+        21,
+        36,
+        25,
+        37,
+        23,
+        38
+      ],
+      "bbox": {
+        "x0": 10,
+        "y0": 153,
+        "x1": 700,
+        "y1": 350
+      },
+      "width": 690,
+      "height": 197
+    },
+    {
+      "id": 9,
+      "name": "icon_set_top",
+      "file": "grouped_assets/09_icon_set_top.png",
+      "component_ids": [
+        2,
+        6,
+        3,
+        7,
+        5,
+        4
+      ],
+      "bbox": {
+        "x0": 603,
+        "y0": 8,
+        "x1": 1313,
+        "y1": 136
+      },
+      "width": 710,
+      "height": 128
+    },
+    {
+      "id": 10,
+      "name": "reward_icons_crown_trophy_medal",
+      "file": "grouped_assets/10_reward_icons_crown_trophy_medal.png",
+      "component_ids": [
+        8,
+        9,
+        10
+      ],
+      "bbox": {
+        "x0": 727,
+        "y0": 128,
+        "x1": 1013,
+        "y1": 231
+      },
+      "width": 286,
+      "height": 103
+    },
+    {
+      "id": 11,
+      "name": "decor_sparkles_confetti_cluster",
+      "file": "grouped_assets/11_decor_sparkles_confetti_cluster.png",
+      "component_ids": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        20,
+        22,
+        24,
+        26,
+        27,
+        28
+      ],
+      "bbox": {
+        "x0": 1025,
+        "y0": 128,
+        "x1": 1414,
+        "y1": 272
+      },
+      "width": 389,
+      "height": 144
+    },
+    {
+      "id": 12,
+      "name": "decor_clouds_set",
+      "file": "grouped_assets/12_decor_clouds_set.png",
+      "component_ids": [
+        30,
+        32,
+        31
+      ],
+      "bbox": {
+        "x0": 715,
+        "y0": 220,
+        "x1": 1010,
+        "y1": 313
+      },
+      "width": 295,
+      "height": 93
+    },
+    {
+      "id": 13,
+      "name": "decor_arrows_set",
+      "file": "grouped_assets/13_decor_arrows_set.png",
+      "component_ids": [
+        39,
+        40,
+        41,
+        42
+      ],
+      "bbox": {
+        "x0": 713,
+        "y0": 303,
+        "x1": 1011,
+        "y1": 381
+      },
+      "width": 298,
+      "height": 78
+    },
+    {
+      "id": 14,
+      "name": "decor_bunting_flags",
+      "file": "grouped_assets/14_decor_bunting_flags.png",
+      "component_ids": [
+        29
+      ],
+      "bbox": {
+        "x0": 1015,
+        "y0": 221,
+        "x1": 1430,
+        "y1": 338
+      },
+      "width": 415,
+      "height": 117
+    },
+    {
+      "id": 15,
+      "name": "room_id_field",
+      "file": "grouped_assets/15_room_id_field.png",
+      "component_ids": [
+        43
+      ],
+      "bbox": {
+        "x0": 1020,
+        "y0": 332,
+        "x1": 1410,
+        "y1": 408
+      },
+      "width": 390,
+      "height": 76
+    },
+    {
+      "id": 16,
+      "name": "button_create_room",
+      "file": "grouped_assets/16_button_create_room.png",
+      "component_ids": [
+        44
+      ],
+      "bbox": {
+        "x0": 12,
+        "y0": 364,
+        "x1": 374,
+        "y1": 518
+      },
+      "width": 362,
+      "height": 154
+    },
+    {
+      "id": 17,
+      "name": "button_join_room",
+      "file": "grouped_assets/17_button_join_room.png",
+      "component_ids": [
+        45
+      ],
+      "bbox": {
+        "x0": 366,
+        "y0": 364,
+        "x1": 710,
+        "y1": 516
+      },
+      "width": 344,
+      "height": 152
+    },
+    {
+      "id": 18,
+      "name": "button_game_start",
+      "file": "grouped_assets/18_button_game_start.png",
+      "component_ids": [
+        51
+      ],
+      "bbox": {
+        "x0": 8,
+        "y0": 518,
+        "x1": 570,
+        "y1": 655
+      },
+      "width": 562,
+      "height": 137
+    },
+    {
+      "id": 19,
+      "name": "button_next_round",
+      "file": "grouped_assets/19_button_next_round.png",
+      "component_ids": [
+        61
+      ],
+      "bbox": {
+        "x0": 15,
+        "y0": 649,
+        "x1": 457,
+        "y1": 765
+      },
+      "width": 442,
+      "height": 116
+    },
+    {
+      "id": 20,
+      "name": "button_decide_blue",
+      "file": "grouped_assets/20_button_decide_blue.png",
+      "component_ids": [
+        58
+      ],
+      "bbox": {
+        "x0": 475,
+        "y0": 646,
+        "x1": 602,
+        "y1": 771
+      },
+      "width": 127,
+      "height": 125
+    },
+    {
+      "id": 21,
+      "name": "object_pancakes",
+      "file": "grouped_assets/21_object_pancakes.png",
+      "component_ids": [
+        46
+      ],
+      "bbox": {
+        "x0": 707,
+        "y0": 384,
+        "x1": 922,
+        "y1": 545
+      },
+      "width": 215,
+      "height": 161
+    },
+    {
+      "id": 22,
+      "name": "word_badges_set",
+      "file": "grouped_assets/22_word_badges_set.png",
+      "component_ids": [
+        47,
+        48,
+        49,
+        50
+      ],
+      "bbox": {
+        "x0": 918,
+        "y0": 415,
+        "x1": 1393,
+        "y1": 509
+      },
+      "width": 475,
+      "height": 94
+    },
+    {
+      "id": 23,
+      "name": "timer_and_score_badges",
+      "file": "grouped_assets/23_timer_and_score_badges.png",
+      "component_ids": [
+        52,
+        53,
+        54,
+        55,
+        56
+      ],
+      "bbox": {
+        "x0": 870,
+        "y0": 523,
+        "x1": 1418,
+        "y1": 646
+      },
+      "width": 548,
+      "height": 123
+    },
+    {
+      "id": 24,
+      "name": "mascot_chick_flag",
+      "file": "grouped_assets/24_mascot_chick_flag.png",
+      "component_ids": [
+        57
+      ],
+      "bbox": {
+        "x0": 571,
+        "y0": 535,
+        "x1": 713,
+        "y1": 655
+      },
+      "width": 142,
+      "height": 120
+    },
+    {
+      "id": 25,
+      "name": "small_tabs_set",
+      "file": "grouped_assets/25_small_tabs_set.png",
+      "component_ids": [
+        62,
+        63,
+        64,
+        65
+      ],
+      "bbox": {
+        "x0": 16,
+        "y0": 776,
+        "x1": 594,
+        "y1": 842
+      },
+      "width": 578,
+      "height": 66
+    },
+    {
+      "id": 26,
+      "name": "chips_set",
+      "file": "grouped_assets/26_chips_set.png",
+      "component_ids": [
+        68,
+        69,
+        70,
+        71,
+        72
+      ],
+      "bbox": {
+        "x0": 19,
+        "y0": 853,
+        "x1": 608,
+        "y1": 911
+      },
+      "width": 589,
+      "height": 58
+    },
+    {
+      "id": 27,
+      "name": "number_badges_set",
+      "file": "grouped_assets/27_number_badges_set.png",
+      "component_ids": [
+        76,
+        77,
+        78,
+        79,
+        80,
+        81
+      ],
+      "bbox": {
+        "x0": 14,
+        "y0": 924,
+        "x1": 366,
+        "y1": 999
+      },
+      "width": 352,
+      "height": 75
+    },
+    {
+      "id": 28,
+      "name": "ranking_medals_set",
+      "file": "grouped_assets/28_ranking_medals_set.png",
+      "component_ids": [
+        73,
+        74,
+        75,
+        82
+      ],
+      "bbox": {
+        "x0": 367,
+        "y0": 916,
+        "x1": 634,
+        "y1": 1009
+      },
+      "width": 267,
+      "height": 93
+    },
+    {
+      "id": 29,
+      "name": "panel_pink_bunting",
+      "file": "grouped_assets/29_panel_pink_bunting.png",
+      "component_ids": [
+        59
+      ],
+      "bbox": {
+        "x0": 638,
+        "y0": 647,
+        "x1": 1025,
+        "y1": 823
+      },
+      "width": 387,
+      "height": 176
+    },
+    {
+      "id": 30,
+      "name": "panel_lavender",
+      "file": "grouped_assets/30_panel_lavender.png",
+      "component_ids": [
+        60
+      ],
+      "bbox": {
+        "x0": 1030,
+        "y0": 647,
+        "x1": 1414,
+        "y1": 823
+      },
+      "width": 384,
+      "height": 176
+    },
+    {
+      "id": 31,
+      "name": "panel_mint",
+      "file": "grouped_assets/31_panel_mint.png",
+      "component_ids": [
+        67
+      ],
+      "bbox": {
+        "x0": 640,
+        "y0": 831,
+        "x1": 1024,
+        "y1": 1020
+      },
+      "width": 384,
+      "height": 189
+    },
+    {
+      "id": 32,
+      "name": "panel_cream_lightbulb",
+      "file": "grouped_assets/32_panel_cream_lightbulb.png",
+      "component_ids": [
+        66
+      ],
+      "bbox": {
+        "x0": 1033,
+        "y0": 820,
+        "x1": 1416,
+        "y1": 1021
+      },
+      "width": 383,
+      "height": 201
+    }
+  ]
+}
