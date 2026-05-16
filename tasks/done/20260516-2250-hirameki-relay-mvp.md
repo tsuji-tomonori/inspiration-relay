@@ -1,9 +1,10 @@
 # ひらめきリレー MVP 実装
 
-- 状態: partially complete（PR flow blocked）
+- 状態: done
 - タスク種別: 機能追加
 - 作成日時: 2026-05-16 22:50 JST
-- ブランチ: `codex/hirameki-relay-mvp`
+- ブランチ: `codex/hirameki-relay-mvp-pr`
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/1
 
 ## 背景
 
@@ -11,9 +12,9 @@
 
 ## workflow 制約
 
-- 必須 flow では `origin/main` から専用 worktree を作成するが、このリポジトリは作業開始時点で remote が無く、`HEAD` も未作成だった。
-- そのため専用 worktree 作成は blocked とし、現在の初期 worktree で `codex/hirameki-relay-mvp` ブランチを作成して作業する。
-- GitHub Apps PR 作成は remote と GitHub repository が無いため、作業完了時に blocked として報告する見込み。
+- 作業開始時点では remote と `origin/main` が無かったため、初期作業は `codex/hirameki-relay-mvp` で進めた。
+- ユーザーが remote を追加した後、空の `main` ベースと PR 用ブランチ `codex/hirameki-relay-mvp-pr` を作成し、main 向け PR #1 を作成した。
+- GitHub Apps の PR コメント投稿は 403 `Resource not accessible by integration` で blocked だったため、`gh pr comment` にフォールバックして受け入れ条件確認コメントとセルフレビューコメントを投稿した。
 
 ## 目的
 
@@ -35,7 +36,6 @@
 - 実 AWS への deploy
 - Cognito / ログイン / 課金
 - 本番向け rate limit の完全実装
-- 外部 repository への push / PR 作成。ただし remote が整えば workflow に従う。
 
 ## 実装計画
 
@@ -67,7 +67,7 @@
 - [x] `npm run typecheck`、`npm run test`、`npm run build`、`npm run cdk:synth` を実行し、結果を記録する。
 - [x] 375px と 1440px の UI 表示を実ブラウザまたは代替手段で確認し、実施不可の場合は理由を記録する。
 - [x] 作業完了レポートを `reports/working/` に保存する。
-- [ ] PR 作成後に受け入れ条件確認コメントを投稿し、task を `tasks/done/` に移動する。未達理由: remote / `origin/main` が無いため PR 作成が blocked。
+- [x] PR 作成後に受け入れ条件確認コメントを投稿し、task を `tasks/done/` に移動する。
 
 ## 検証計画
 
@@ -89,6 +89,6 @@
 
 ## リスク
 
-- 初期 repo のため remote / PR flow が完遂できない可能性が高い。
+- 作業開始時点では remote / PR flow が blocked だったが、remote 追加後に PR #1 まで完了した。
 - 依存関係の install はネットワーク制限で blocked になる可能性がある。
 - WebSocket の AWS 統合はローカル完全再現ではなく handler 境界と CDK 定義中心になる可能性がある。

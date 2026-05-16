@@ -19,7 +19,7 @@
 | R4 | AWS CDK インフラ | 高 | 対応 |
 | R5 | ログイン不要、Cognito なし、課金なし | 高 | 対応 |
 | R6 | 検証実行 | 高 | 対応 |
-| R7 | worktree から PR まで | 高 | partially complete |
+| R7 | worktree から PR まで | 高 | 対応（remote 追加後に PR #1 作成） |
 
 ## 3. 検討・判断したこと
 
@@ -28,7 +28,7 @@
 - 本番 UI に固定の架空プレイヤーや固定スコアを表示せず、API snapshot または明示的な empty/error state から描画する構成にした。
 - API は Hono と game-core を分離し、ヒント検証、回答正規化、ヒント並び順、得点処理をテスト可能にした。
 - CDK は CloudFront OAC、S3、HTTP API、WebSocket API、Lambda、DynamoDB 2テーブルを定義した。
-- リポジトリに remote と初期 commit が無かったため、専用 worktree と PR 作成は実施できなかった。
+- 作業開始時点では remote と初期 commit が無かったため、初期実装は現在の worktree で進めた。remote 追加後に `main` ベースと PR 用ブランチを作成し、PR #1 を作成した。
 
 ## 4. 実施した作業
 
@@ -40,6 +40,8 @@
 - `.workspace/hirameki_relay_asset_pack.zip` から runtime 用アセットを `apps/web/public/assets/hirameki-relay/` に展開した。
 - UI spec と asset map を `docs/ui-spec/hirameki-relay-mvp.md` に作成した。
 - README と visual QA 用スクリプトを追加した。
+- PR #1 を作成し、受け入れ条件確認コメントとセルフレビューコメントを投稿した。
+- task md を `tasks/done/20260516-2250-hirameki-relay-mvp.md` に移動した。
 
 ## 5. 成果物
 
@@ -50,22 +52,24 @@
 | `packages/game-core` | TS | ヒント検証、回答正規化、得点、並び替え | ゲーム仕様 |
 | `infra` | CDK/TS | S3/CloudFront/API Gateway/Lambda/DynamoDB | AWS CDK infra |
 | `docs/ui-spec/hirameki-relay-mvp.md` | Markdown | UI spec と asset mapping | `.workspace` 反映 |
+| `tasks/done/20260516-2250-hirameki-relay-mvp.md` | Markdown | task と受け入れ条件の完了記録 | PR flow |
 | `reports/working/visual-qa/home-375.png` | PNG | 375px visual QA screenshot | 視覚確認 |
 | `reports/working/visual-qa/home-1440.png` | PNG | 1440px visual QA screenshot | 視覚確認 |
+| https://github.com/tsuji-tomonori/inspiration-relay/pull/1 | Pull Request | main 向け PR | PR flow |
 
 ## 6. 指示への fit 評価
 
 | 評価軸 | 評価 | 理由 |
 |---|---:|---|
-| 指示網羅性 | 4 | Web/API/infra/asset 利用は満たしたが、PR は remote 不在で blocked |
-| 制約遵守 | 4 | Cognito/課金なし、未実施事項の明記を遵守 |
+| 指示網羅性 | 5 | Web/API/infra/asset 利用に加え、remote 追加後に PR flow も完了 |
+| 制約遵守 | 4 | Cognito/課金なし、GitHub Apps blocked 時の gh fallback 理由明記を遵守 |
 | 成果物品質 | 4 | MVP として動作する骨格と検証を追加。DynamoDB 永続 repository は今後の拡張余地 |
 | 説明責任 | 5 | workflow 制約、検証、残リスクを記録 |
 | 検収容易性 | 4 | README、UI spec、検証コマンド、スクリーンショットを用意 |
 
-総合fit: 4.2 / 5.0（約84%）
+総合fit: 4.6 / 5.0（約92%）
 
-理由: 主要な実装要件と検証は満たした。一方で、初期 repo に remote / `origin/main` が無いため、専用 worktree 作成、push、PR、PR コメント、task done 移動は完了できなかった。
+理由: 主要な実装要件と検証を満たし、remote 追加後に push、PR、PR コメント、task done 移動まで完了した。作業開始時点で `origin/main` が無かったため、厳密な専用 worktree 開始だけは実施できていない。
 
 ## 7. 実行した検証
 
@@ -79,9 +83,10 @@
 
 ## 8. 未対応・制約・リスク
 
-- PR 作成: 未実施。理由: 作業開始時点で remote が無く、`origin/main` も存在しない。
-- 専用 worktree: 未実施。理由: `HEAD` が未作成で `origin/main` が無い初期 repo だったため。
-- task done 移動: 未実施。理由: PR 作成と PR 受け入れ条件コメントが blocked のため。
+- PR 作成: 完了。PR #1: https://github.com/tsuji-tomonori/inspiration-relay/pull/1
+- 専用 worktree: 未実施。理由: 作業開始時点で `HEAD` が未作成で `origin/main` が無い初期 repo だったため。
+- task done 移動: 完了。`tasks/done/20260516-2250-hirameki-relay-mvp.md`
+- GitHub Apps PR コメント: 未実施。理由: 403 `Resource not accessible by integration`。代替として `gh pr comment` で受け入れ条件確認コメントとセルフレビューコメントを投稿済み。
 - DynamoDB 永続 repository: 今回は CDK と API 境界までで、ローカル API 実装は in-memory repository。AWS deploy 前に DynamoDB repository 実装が必要。
 - WebSocket 本実装: `$connect` / `$disconnect` / `$default` の handler 境界はあるが、接続 table 保存と Management API broadcast は今後の実装対象。
 - `npm audit`: 5 moderate vulnerabilities が残っている。破壊的更新を伴う可能性があるため今回は `npm audit fix --force` は未実施。
