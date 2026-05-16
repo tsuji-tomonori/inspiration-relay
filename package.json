@@ -11,9 +11,14 @@
   "scripts": {
     "dev:web": "npm run dev -w @hirameki-relay/web",
     "dev:api": "npm run dev -w @hirameki-relay/api",
-    "build": "npm run build -ws --if-present",
-    "typecheck": "npm run typecheck -ws --if-present",
-    "test": "npm run test -ws --if-present",
+    "docs:api": "npm run docs:api -w @hirameki-relay/api",
+    "docs:api:check": "npm run docs:api:check -w @hirameki-relay/api",
+    "docs:infra": "npm run docs:infra -w @hirameki-relay/infra",
+    "docs:infra:check": "npm run docs:infra:check -w @hirameki-relay/infra",
+    "docs:check": "npm run docs:api:check && npm run docs:infra:check",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
     "cdk:synth": "npm run synth -w @hirameki-relay/infra"
   },
   "devDependencies": {

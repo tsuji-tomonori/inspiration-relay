@@ -4,6 +4,15 @@ import { GameService } from "./service";
 import { MemoryRoomRepository } from "./store";
 
 describe("api", () => {
+  it("serves OpenAPI from the runtime route", async () => {
+    const app = createApp(new GameService(new MemoryRoomRepository()));
+    const response = await app.request("/api/openapi.json");
+    expect(response.status).toBe(200);
+    const document = await response.json();
+    expect(document.openapi).toBe("3.1.0");
+    expect(document.paths["/api/v1/rooms"].post.summary).toBe("ルームを作成");
+  });
+
   it("creates and joins a room", async () => {
     const app = createApp(new GameService(new MemoryRoomRepository()));
     const createResponse = await app.request("/api/v1/rooms", {
