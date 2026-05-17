@@ -1,6 +1,6 @@
 # デプロイ環境 WebSocket 参加同期修正
 
-- 状態: do
+- 状態: done
 - タスク種別: 修正
 - 作成日時: 2026-05-17 18:16 JST
 - ブランチ: `codex/fix-websocket-deployed-sync`
@@ -124,3 +124,10 @@
 - `npm run test --workspaces --if-present`: pass
 - `npm run build --workspaces --if-present`: pass
 - `git diff --check`: pass
+
+## PR
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/7
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/7#issuecomment-4470115533
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/7#issuecomment-4470116383
+- 備考: GitHub Apps での PR コメント投稿は 403 `Resource not accessible by integration` だったため、`gh pr comment` へフォールバックした。
