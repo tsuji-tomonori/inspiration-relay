@@ -14,6 +14,29 @@ describe("HiramekiRelayStack", () => {
     expect(JSON.stringify(template.toJSON())).not.toContain("AWS::Cognito");
   });
 
+  it("uses valid Node.js Lambda handler names", () => {
+    const app = new App();
+    const stack = new HiramekiRelayStack(app, "TestStack");
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties("AWS::Lambda::Function", {
+      Handler: "handler.handler",
+      Runtime: "nodejs22.x"
+    });
+    template.hasResourceProperties("AWS::Lambda::Function", {
+      Handler: "ws-handler.connectHandler",
+      Runtime: "nodejs22.x"
+    });
+    template.hasResourceProperties("AWS::Lambda::Function", {
+      Handler: "ws-handler.disconnectHandler",
+      Runtime: "nodejs22.x"
+    });
+    template.hasResourceProperties("AWS::Lambda::Function", {
+      Handler: "ws-handler.messageHandler",
+      Runtime: "nodejs22.x"
+    });
+  });
+
   it("deploys web assets and serves the SPA from CloudFront", () => {
     const app = new App();
     const stack = new HiramekiRelayStack(app, "TestStack");
