@@ -48,11 +48,19 @@
 - `npm run typecheck -w @hirameki-relay/api`: pass
 - `git diff --check`: pass
 
+## PR 操作
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/9
+- PR 作成: GitHub Apps に PR 作成ツールが公開されていなかったため、`gh pr create` で実施。
+- 受け入れ条件コメント: GitHub Apps のコメント投稿が 403 だったため、`gh pr comment` で投稿。
+- セルフレビューコメント: GitHub Apps のコメント投稿が 403 だったため、`gh pr comment` で投稿。
+
 ## 未対応・制約・リスク
 
 - Web 側の WebSocket 受信テストは今回未対応。API が `room.snapshot.updated` / `reason: "game.started"` を出す契約の固定までを対象にした。
 - `submitHint()`、`submitAnswer()`、`skipAnswer()`、`nextRound()` の broadcast テストは今回未対応。次の Sprint で追加する余地がある。
 - `npm ci` 後に既存依存由来の moderate 脆弱性警告が 5 件表示されたが、今回の単体テスト実装とは独立しているため変更しなかった。
+- GitHub Apps による PR 作成・コメント投稿は完了できず、`gh` にフォールバックした。
 
 ## Fit 評価
 

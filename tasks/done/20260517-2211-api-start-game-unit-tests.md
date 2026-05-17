@@ -1,6 +1,6 @@
 # API startGame unit tests
 
-状態: doing
+状態: done
 
 ## 背景
 
@@ -50,13 +50,19 @@ API 側に最初に必要な単体テストを追加し、ゲーム開始時の�
 
 ## 受け入れ条件
 
-- [ ] `GameService.startGame()` が 3人以上の `LOBBY` で `IN_GAME` / `HINT_SUBMITTING` に遷移するテストがある。
-- [ ] ゲーム開始時に `room.snapshot.updated` 相当の `reason: "game.started"` broadcast が行われるテストがある。
-- [ ] 開始後、回答者 snapshot に `topicDisplay` が含まれないテストがある。
-- [ ] 開始後、ヒント役 snapshot に `topicDisplay` が含まれるテストがある。
-- [ ] 非ホストはゲーム開始できないテストがある。
-- [ ] 3人未満ではゲーム開始できないテストがある。
-- [ ] 選択した API 検証コマンドが成功している、または未実施理由が明記されている。
+- [x] `GameService.startGame()` が 3人以上の `LOBBY` で `IN_GAME` / `HINT_SUBMITTING` に遷移するテストがある。
+- [x] ゲーム開始時に `room.snapshot.updated` 相当の `reason: "game.started"` broadcast が行われるテストがある。
+- [x] 開始後、回答者 snapshot に `topicDisplay` が含まれないテストがある。
+- [x] 開始後、ヒント役 snapshot に `topicDisplay` が含まれるテストがある。
+- [x] 非ホストはゲーム開始できないテストがある。
+- [x] 3人未満ではゲーム開始できないテストがある。
+- [x] 選択した API 検証コマンドが成功している、または未実施理由が明記されている。
+
+## 完了メモ
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/9
+- 受け入れ条件コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/9#issuecomment-4470854017
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/9#issuecomment-4470854691
 
 ## 検証計画
 
