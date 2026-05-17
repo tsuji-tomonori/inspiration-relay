@@ -1,5 +1,6 @@
 import { isCorrectAnswer, nextAnswerer, scorePlayers, sortHintsForReveal, validateHint, validateNickname } from "@hirameki-relay/game-core";
 import { avatarIds, type AvatarId, type Hint, type PublicHint, type RoomSnapshot, type SessionResponse, type Topic } from "@hirameki-relay/shared";
+import { MemoryRealtimeRepository, NoopRoomEventBroadcaster, ttlFromNow, type RealtimeRepository, type RoomEventBroadcaster, type RoomUpdateReason } from "./realtime";
 import { hashToken, makeInitialRoom, makePlayer, randomToken, type RoomRepository, type RoomState, type StoredPlayer } from "./store";
 
 export class ApiError extends Error {
@@ -14,7 +15,11 @@ export class ApiError extends Error {
 }
 
 export class GameService {
-  constructor(private readonly repository: RoomRepository) {}
+  constructor(
+    private readonly repository: RoomRepository,
+    private readonly realtimeRepository: RealtimeRepository = new MemoryRealtimeRepository(),
+    private readonly roomEventBroadcaster: RoomEventBroadcaster = new NoopRoomEventBroadcaster()
+  ) {}
 
   async createRoom(input: { nickname: string; avatarId: string }): Promise<SessionResponse> {
     const nickname = normalizeNickname(input.nickname);
@@ -55,6 +60,7 @@ export class GameService {
     state.players.push(player);
     touch(state);
     await this.repository.saveRoomState(state);
+    await this.notifyRoomUpdated(state.room.roomId, "player.joined");
 
     return {
       roomId: state.room.roomId,
@@ -71,12 +77,21 @@ export class GameService {
   }
 
   async wsTicket(roomId: string, playerToken: string): Promise<{ ticket: string; expiresIn: number; wsUrl: string }> {
-    await this.authorizePlayer(roomId, playerToken);
+    const player = await this.authorizePlayer(roomId, playerToken);
     const ticket = randomToken();
+    const expiresIn = 60;
+    const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
+    await this.realtimeRepository.saveTicket({
+      ticketHash: hashToken(ticket),
+      roomId: roomId.toUpperCase(),
+      playerId: player.playerId,
+      expiresAt,
+      ttl: ttlFromNow(expiresIn)
+    });
     return {
       ticket,
-      expiresIn: 60,
-      wsUrl: `/ws/v1?ticket=${ticket}`
+      expiresIn,
+      wsUrl: buildWsUrl(ticket)
     };
   }
 
@@ -220,6 +235,14 @@ export class GameService {
     }
     return state;
   }
+
+  private async notifyRoomUpdated(roomId: string, reason: RoomUpdateReason): Promise<void> {
+    try {
+      await this.roomEventBroadcaster.broadcastRoomUpdate(roomId, reason);
+    } catch (error) {
+      console.error("room update notification failed", { roomId, reason, error });
+    }
+  }
 }
 
 export function buildSnapshot(state: RoomState, viewerPlayerId?: string): RoomSnapshot {
@@ -340,4 +363,10 @@ function normalizeNickname(nickname: string): string {
 
 function parseAvatarId(value: string): AvatarId {
   return avatarIds.includes(value as AvatarId) ? (value as AvatarId) : "ghost";
+}
+
+function buildWsUrl(ticket: string): string {
+  const baseUrl = process.env.WEBSOCKET_URL ?? "/ws/v1";
+  const separator = baseUrl.includes("?") ? "&" : "?";
+  return `${baseUrl}${separator}ticket=${encodeURIComponent(ticket)}`;
 }

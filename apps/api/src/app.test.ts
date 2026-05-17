@@ -1,7 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { createApp } from "./app";
+import { MemoryRealtimeRepository, type RoomEventBroadcaster, type RoomUpdateReason } from "./realtime";
 import { GameService } from "./service";
-import { MemoryRoomRepository } from "./store";
+import { hashToken, MemoryRoomRepository } from "./store";
+import { createWebSocketHandlers } from "./ws-handler";
+
+class RecordingBroadcaster implements RoomEventBroadcaster {
+  readonly events: Array<{ roomId: string; reason: RoomUpdateReason }> = [];
+
+  async broadcastRoomUpdate(roomId: string, reason: RoomUpdateReason): Promise<void> {
+    this.events.push({ roomId, reason });
+  }
+}
 
 describe("api", () => {
   it("serves OpenAPI from the runtime route", async () => {
@@ -32,5 +42,54 @@ describe("api", () => {
     expect(joinResponse.status).toBe(200);
     const joined = await joinResponse.json();
     expect(joined.snapshot.players).toHaveLength(2);
+  });
+
+  it("notifies the room when a player joins", async () => {
+    const broadcaster = new RecordingBroadcaster();
+    const service = new GameService(new MemoryRoomRepository(), new MemoryRealtimeRepository(), broadcaster);
+    const created = await service.createRoom({ nickname: "さくら", avatarId: "rabbit" });
+
+    await service.joinRoom(created.roomId, { nickname: "ぺんたろう", avatarId: "penguin" });
+
+    expect(broadcaster.events).toEqual([
+      { roomId: created.roomId, reason: "player.joined" }
+    ]);
+  });
+
+  it("stores websocket tickets and registers authorized connections", async () => {
+    const realtimeRepository = new MemoryRealtimeRepository();
+    const service = new GameService(new MemoryRoomRepository(), realtimeRepository, new RecordingBroadcaster());
+    const created = await service.createRoom({ nickname: "さくら", avatarId: "rabbit" });
+    const ticketResponse = await service.wsTicket(created.roomId, created.playerToken);
+    const ticket = new URL(ticketResponse.wsUrl, "https://example.com").searchParams.get("ticket");
+    expect(ticket).toBeTruthy();
+
+    const handlers = createWebSocketHandlers(realtimeRepository);
+    const connected = await handlers.connectHandler({
+      requestContext: {
+        routeKey: "$connect",
+        connectionId: "conn-1"
+      },
+      queryStringParameters: { ticket: ticket ?? undefined }
+    });
+
+    expect(connected.statusCode).toBe(200);
+    await expect(realtimeRepository.consumeTicket(hashToken(ticket ?? ""))).resolves.toBeNull();
+    await expect(realtimeRepository.listConnectionsByRoom(created.roomId)).resolves.toEqual([
+      expect.objectContaining({
+        connectionId: "conn-1",
+        roomId: created.roomId,
+        playerId: created.playerId
+      })
+    ]);
+
+    const disconnected = await handlers.disconnectHandler({
+      requestContext: {
+        routeKey: "$disconnect",
+        connectionId: "conn-1"
+      }
+    });
+    expect(disconnected.statusCode).toBe(200);
+    await expect(realtimeRepository.listConnectionsByRoom(created.roomId)).resolves.toEqual([]);
   });
 });

@@ -61,6 +61,32 @@ describe("HiramekiRelayStack", () => {
     });
   });
 
+  it("allows API Lambda to notify websocket room connections", () => {
+    const app = new App();
+    const stack = new HiramekiRelayStack(app, "TestStack");
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties("AWS::Lambda::Function", {
+      Handler: "handler.handler",
+      Environment: Match.objectLike({
+        Variables: Match.objectLike({
+          WEBSOCKET_URL: "/ws/v1",
+          WEBSOCKET_MANAGEMENT_ENDPOINT: Match.anyValue()
+        })
+      })
+    });
+    template.hasResourceProperties("AWS::IAM::Policy", {
+      PolicyDocument: Match.objectLike({
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Action: "execute-api:ManageConnections",
+            Effect: "Allow"
+          })
+        ])
+      })
+    });
+  });
+
   it("deploys web assets and serves the SPA from CloudFront", () => {
     const app = new App();
     const stack = new HiramekiRelayStack(app, "TestStack");
