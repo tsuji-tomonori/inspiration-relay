@@ -158,4 +158,26 @@ describe("api", () => {
     expect(disconnected.statusCode).toBe(200);
     await expect(realtimeRepository.listConnectionsByRoom(created.roomId)).resolves.toEqual([]);
   });
+
+  it("returns the configured websocket stage URL in tickets", async () => {
+    const originalWebSocketUrl = process.env.WEBSOCKET_URL;
+    process.env.WEBSOCKET_URL = "wss://example.execute-api.ap-northeast-1.amazonaws.com/v1";
+    try {
+      const service = new GameService(new MemoryRoomRepository(), new MemoryRealtimeRepository(), new RecordingBroadcaster());
+      const created = await service.createRoom({ nickname: "さくら", avatarId: "rabbit" });
+
+      const ticketResponse = await service.wsTicket(created.roomId, created.playerToken);
+      const wsUrl = new URL(ticketResponse.wsUrl);
+
+      expect(wsUrl.origin).toBe("wss://example.execute-api.ap-northeast-1.amazonaws.com");
+      expect(wsUrl.pathname).toBe("/v1");
+      expect(wsUrl.searchParams.get("ticket")).toBeTruthy();
+    } finally {
+      if (originalWebSocketUrl === undefined) {
+        delete process.env.WEBSOCKET_URL;
+      } else {
+        process.env.WEBSOCKET_URL = originalWebSocketUrl;
+      }
+    }
+  });
 });
