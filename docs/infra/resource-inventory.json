@@ -676,7 +676,7 @@
       "type": "AWS::Lambda::Function",
       "purpose": "Lambda function",
       "settings": {
-        "handler": "handler",
+        "handler": "handler.handler",
         "runtime": "nodejs22.x",
         "architectures": [
           "arm64"
