@@ -46,6 +46,7 @@ const typeLabels: Record<string, string> = {
   "AWS::IAM::Role": "IAM role",
   "AWS::Lambda::Function": "Lambda function",
   "AWS::Lambda::Permission": "Lambda invoke permission",
+  "AWS::Logs::LogGroup": "CloudWatch Logs log group",
   "AWS::S3::Bucket": "S3 bucket",
   "AWS::S3::BucketPolicy": "S3 bucket policy"
 };
@@ -56,6 +57,7 @@ const domainTypes: Array<{ domain: string; types: string[] }> = [
   { domain: "Compute", types: ["AWS::Lambda::Function", "AWS::Lambda::Permission"] },
   { domain: "API", types: ["AWS::ApiGatewayV2::Api", "AWS::ApiGatewayV2::Integration", "AWS::ApiGatewayV2::Route", "AWS::ApiGatewayV2::Stage"] },
   { domain: "Delivery", types: ["AWS::CloudFront::Distribution", "AWS::CloudFront::OriginAccessControl"] },
+  { domain: "Observability", types: ["AWS::Logs::LogGroup"] },
   { domain: "Security/IAM", types: ["AWS::IAM::Role", "AWS::IAM::Policy"] }
 ];
 
@@ -127,7 +129,14 @@ function summarizeResource(resource: CloudFormationResource): Record<string, unk
         architectures: valueAt(props, "Architectures"),
         memorySize: valueAt(props, "MemorySize"),
         timeoutSeconds: valueAt(props, "Timeout"),
+        loggingConfig: valueAt(props, "LoggingConfig"),
         environment: sanitizeObject(valueAt(props, "Environment"))
+      });
+    case "AWS::Logs::LogGroup":
+      return compact({
+        logGroupName: valueAt(props, "LogGroupName"),
+        retentionInDays: valueAt(props, "RetentionInDays"),
+        kmsKeyId: summarizeValue(valueAt(props, "KmsKeyId"))
       });
     case "AWS::ApiGatewayV2::Api":
       return compact({

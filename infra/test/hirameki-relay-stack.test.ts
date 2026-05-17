@@ -14,6 +14,30 @@ describe("HiramekiRelayStack", () => {
     expect(JSON.stringify(template.toJSON())).not.toContain("AWS::Cognito");
   });
 
+  it("sends application Lambda logs to one JSON CloudWatch Logs group", () => {
+    const app = new App();
+    const stack = new HiramekiRelayStack(app, "TestStack");
+    const template = Template.fromStack(stack);
+
+    template.resourceCountIs("AWS::Logs::LogGroup", 1);
+    template.hasResourceProperties("AWS::Logs::LogGroup", {
+      LogGroupName: "/hirameki-relay/lambda",
+      RetentionInDays: 731
+    });
+    template.resourcePropertiesCountIs(
+      "AWS::Lambda::Function",
+      {
+        LoggingConfig: {
+          LogFormat: "JSON",
+          LogGroup: {
+            Ref: Match.stringLikeRegexp("ApplicationLambdaLogGroup")
+          }
+        }
+      },
+      4
+    );
+  });
+
   it("deploys web assets and serves the SPA from CloudFront", () => {
     const app = new App();
     const stack = new HiramekiRelayStack(app, "TestStack");
