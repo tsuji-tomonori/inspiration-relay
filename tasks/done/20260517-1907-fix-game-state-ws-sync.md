@@ -124,10 +124,13 @@
 - `npm run docs:api:check`: pass。初回は sandbox の `/tmp/tsx-*` IPC pipe 作成で `EPERM` となったため、同一コマンドを承認付きで再実行。
 - `npm run build --workspaces --if-present`: pass
 - `git diff --check`: pass
+- `npm run docs:infra`: pass（CI の `docs:infra:check` 失敗を受けて生成 docs を更新）
+- `npm run docs:check`: pass
 
 ## ドキュメント保守結果
 
 - API schema 変更に伴い `docs/api/openapi.json` と `docs/api/openapi.md` を再生成した。
+- Web build hash 変化に伴い、CI の `docs:infra:check` で検出された `docs/infra/resource-inventory.json` と `docs/infra/resource-inventory.md` の差分を再生成した。
 - README と UI spec は、既に WebSocket 通知で認可済み REST snapshot を再取得する方針を記載しているため、追加更新は不要と判断した。
 
 ## 未対応・制約
@@ -140,3 +143,4 @@
 - 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/8#issuecomment-4470289334
 - セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/8#issuecomment-4470290154
 - GitHub Apps コメント投稿は 403 で失敗したため、`gh pr comment` にフォールバックした。
+- PR 作成後の初回 CI は `docs:infra:check` で失敗したため、infra docs を再生成して追加 commit した。

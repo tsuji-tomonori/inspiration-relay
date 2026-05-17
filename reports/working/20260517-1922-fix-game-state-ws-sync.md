@@ -44,6 +44,7 @@
 | `apps/web/src/App.tsx` | TypeScript/React | UI 操作可否を permissions に移行 | R3-R4 |
 | `apps/api/src/app.test.ts` | Vitest | broadcast / 権限分離テスト追加 | R1-R5 |
 | `docs/api/openapi.json`, `docs/api/openapi.md` | Markdown/JSON | API schema docs 更新 | R5 |
+| `docs/infra/resource-inventory.json`, `docs/infra/resource-inventory.md` | Markdown/JSON | Web build hash 変化に伴う infra inventory 更新 | R5 |
 | `tasks/do/20260517-1907-fix-game-state-ws-sync.md` | Markdown | task、受け入れ条件、検証記録 | AGENTS workflow |
 
 ## 6. 指示へのfit評価
@@ -72,9 +73,12 @@
 - `npm run docs:api:check`: pass。初回は sandbox の `/tmp/tsx-*` IPC pipe 作成で `EPERM` となったため、同一コマンドを承認付きで再実行。
 - `npm run build --workspaces --if-present`: pass
 - `git diff --check`: pass
+- `npm run docs:infra`: pass（CI の `docs:infra:check` 失敗を受けて生成 docs を更新）
+- `npm run docs:check`: pass
 
 ## 8. 未対応・制約・リスク
 
 - WebSocket `$default` の `game.start` 等 command 処理は未実装。今回の直接修正では、既存 HTTP command から同じ `GameService` を通った後に broadcast する経路を優先した。
 - 実 AWS WebSocket 接続で、3ブラウザ相当の end-to-end 同期確認は未実施。
 - `npm ci` 後の `npm audit` は 5 件の moderate vulnerability を報告したが、依存更新は今回の不具合修正範囲外。
+- PR 作成後の初回 CI は `docs:infra:check` で失敗した。原因は Web build output の hash 変化に伴う `docs/infra/resource-inventory.*` の未更新で、`npm run docs:infra` と `npm run docs:check` により修正・確認した。
