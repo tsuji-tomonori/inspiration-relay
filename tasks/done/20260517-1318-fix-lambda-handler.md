@@ -1,9 +1,10 @@
 # Lambda handler 設定エラー修正
 
-- 状態: do
+- 状態: done
 - タスク種別: 修正
 - 作成日時: 2026-05-17 13:18 JST
 - ブランチ: `codex/fix-lambda-handler`
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/4
 
 ## 背景
 
@@ -71,11 +72,11 @@ Lambda の handler 指定が Node.js ランタイムで解釈できる形式に�
 
 ## 受け入れ条件
 
-- [ ] Lambda handler が Node.js ランタイムの期待する `file.export` 形式で定義されている。
-- [ ] 対象 handler の export 名と CDK 設定が一致している。
-- [ ] infra test または同等の検証で handler 設定が確認できる。
-- [ ] 関連する最小十分な検証が pass している。
-- [ ] 実施内容と制約を `reports/working/` に記録している。
+- [x] Lambda handler が Node.js ランタイムの期待する `file.export` 形式で定義されている。
+- [x] 対象 handler の export 名と CDK 設定が一致している。
+- [x] infra test または同等の検証で handler 設定が確認できる。
+- [x] 関連する最小十分な検証が pass している。
+- [x] 実施内容と制約を `reports/working/` に記録している。
 
 ## 実施結果
 
@@ -89,6 +90,12 @@ Lambda の handler 指定が Node.js ランタイムで解釈できる形式に�
 - `npm run docs:infra -w @hirameki-relay/infra`: pass
 - `npm run docs:infra:check -w @hirameki-relay/infra`: pass
 - `git diff --check`: pass
+
+## PR コメント結果
+
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/4#issuecomment-4469317858
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/4#issuecomment-4469318919
+- GitHub Apps コメント投稿は 403 で失敗したため、`gh pr comment` にフォールバックした。
 
 ## 検証計画
 
