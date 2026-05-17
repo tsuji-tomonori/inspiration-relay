@@ -32,7 +32,7 @@ Web 側に最初に必要な単体テストを追加し、`reason: "game.started
 
 ## ドキュメント保守計画
 
-今回の変更はテスト追加と testability 改善に限定する。ユーザー向け挙動や運用手順は変えないため、README / docs の更新は原則不要と判断する。検証結果と判断理由は作業レポートに記録する。
+今回の変更はテスト追加と testability 改善に限定する。ユーザー向け挙動や運用手順は変えないため、README の更新は不要と判断する。最新 `main` への rebase 後、web build artifact hash の変化で infra generated docs が stale になったため、`docs/infra/resource-inventory.*` は再生成して同期する。
 
 ## 受け入れ条件
 
@@ -67,12 +67,17 @@ Web 側に最初に必要な単体テストを追加し、`reason: "game.started
 - `apps/web/src/websocket.test.ts` に URL 解決と parser の単体テストを追加した。
 - `apps/web/src/App.test.tsx` に WebSocket 同期の component test を追加した。
 - `apps/web` に jsdom / Testing Library / jest-dom と Vitest setup を追加した。
+- 最新 `main` の `RoomSnapshot.permissions` 追加に合わせて test fixture を更新した。
+- `docs/infra/resource-inventory.*` を再生成した。
 - 作業レポート: `reports/working/20260517-2221-web-ws-sync-tests.md`
 
 ## 検証結果
 
 - `npm run test -w @hirameki-relay/web`: pass
 - `npm run typecheck -w @hirameki-relay/web`: pass
+- `npm run build -w @hirameki-relay/web`: pass
+- `npm run docs:infra`: pass
+- `npm run docs:check`: pass
 - `git diff --check`: pass
 
 ## PR

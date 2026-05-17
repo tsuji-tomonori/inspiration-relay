@@ -176,7 +176,13 @@ function lobbySnapshot(): RoomSnapshot {
     hints: [],
     submittedHintPlayerIds: [],
     viewerPlayerId: "p2",
-    viewerRole: "hinter"
+    viewerRole: "hinter",
+    permissions: {
+      canStartGame: false,
+      canGoNextRound: false,
+      canSubmitAnswer: false,
+      canSubmitHint: false
+    }
   };
 }
 
@@ -196,7 +202,13 @@ function hintSubmittingSnapshot(): RoomSnapshot {
       winningHintPlayerId: null,
       result: null
     },
-    viewerRole: "hinter"
+    viewerRole: "hinter",
+    permissions: {
+      canStartGame: false,
+      canGoNextRound: false,
+      canSubmitAnswer: false,
+      canSubmitHint: true
+    }
   };
 }
 

@@ -25,7 +25,8 @@
 - `App.tsx` 内部の `parseRoomSnapshotUpdatedMessage()` と `resolveWebSocketUrl()` は挙動を変えず `websocket.ts` へ切り出し、pure unit test を書けるようにした。
 - React component test には `jsdom`, Testing Library, jest-dom が必要なため web workspace の devDependencies に追加した。
 - Vite 6 と Vitest 2 系の型差分を避けるため、アプリ用 `vite.config.ts` は維持し、テスト用設定を `vitest.config.ts` に分離した。
-- README / docs は、ユーザー向け挙動や運用手順の変更ではなくテスト追加のため更新不要と判断した。
+- README は、ユーザー向け挙動や運用手順の変更ではなくテスト追加のため更新不要と判断した。
+- 最新 `main` への rebase 後、web build artifact hash の変化により infra generated docs が stale になったため、`npm run docs:infra` で `docs/infra/resource-inventory.*` を同期した。
 
 ## 4. 実施作業
 
@@ -37,6 +38,8 @@
   - 非ホスト Lobby が通知後に HINT_SUBMITTING の画面へ遷移する。
 - `apps/web/vitest.config.ts` と `apps/web/src/test/setup.ts` を追加した。
 - `apps/web/package.json` と `package-lock.json` に component test 用 devDependencies を追加した。
+- 最新 `main` に rebase し、`RoomSnapshot.permissions` を App test fixture に反映した。
+- `docs/infra/resource-inventory.json` と `docs/infra/resource-inventory.md` を再生成した。
 
 ## 5. 成果物
 
@@ -47,12 +50,16 @@
 | `apps/web/src/App.test.tsx` | App WebSocket synchronization test | 非ホスト同期不具合の再発防止 |
 | `apps/web/vitest.config.ts` | jsdom test config | React component test 環境整備 |
 | `apps/web/src/test/setup.ts` | jest-dom setup | DOM matcher 利用 |
+| `docs/infra/resource-inventory.*` | generated infra docs | 最新 build artifact hash に同期 |
 | `reports/working/20260517-2221-web-ws-sync-tests.md` | 本レポート | 作業内容と検証結果の記録 |
 
 ## 6. 実行した検証
 
 - `npm run test -w @hirameki-relay/web`: pass
 - `npm run typecheck -w @hirameki-relay/web`: pass
+- `npm run build -w @hirameki-relay/web`: pass
+- `npm run docs:infra`: pass
+- `npm run docs:check`: pass
 - `git diff --check`: pass
 
 ## 7. 未対応・制約・リスク
