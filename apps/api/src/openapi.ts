@@ -354,7 +354,7 @@ export const openApiDocument: OpenApiDocument = {
       },
       RoomSnapshot: {
         type: "object",
-        required: ["roomId", "status", "hostPlayerId", "settings", "currentRoundNo", "players", "round", "hints", "submittedHintPlayerIds", "viewerRole"],
+        required: ["roomId", "status", "hostPlayerId", "settings", "currentRoundNo", "players", "round", "hints", "submittedHintPlayerIds", "viewerRole", "permissions"],
         properties: {
           roomId: { type: "string" },
           status: { type: "string", enum: ["LOBBY", "IN_GAME", "GAME_RESULT", "CLOSED"] },
@@ -366,8 +366,19 @@ export const openApiDocument: OpenApiDocument = {
           hints: { type: "array", items: ref("PublicHint") },
           submittedHintPlayerIds: { type: "array", items: { type: "string" } },
           viewerPlayerId: { type: "string" },
-          viewerRole: { type: "string", enum: ["host", "answerer", "hinter", "spectator", "unknown"] },
+          viewerRole: { type: "string", enum: ["answerer", "hinter", "spectator", "unknown"] },
+          permissions: ref("RoomPermissions"),
           wsUrl: { type: "string" }
+        }
+      },
+      RoomPermissions: {
+        type: "object",
+        required: ["canStartGame", "canGoNextRound", "canSubmitAnswer", "canSubmitHint"],
+        properties: {
+          canStartGame: { type: "boolean" },
+          canGoNextRound: { type: "boolean" },
+          canSubmitAnswer: { type: "boolean" },
+          canSubmitHint: { type: "boolean" }
         }
       },
       RoomSettings: {
