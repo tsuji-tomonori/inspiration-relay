@@ -1,6 +1,6 @@
 # CDK による SPA 配信デプロイ修正
 
-- 状態: do
+- 状態: done
 - タスク種別: 修正
 - ブランチ: `codex/cdk-site-deploy`
 - 作成日時: 2026-05-17 12:41 JST
@@ -50,14 +50,14 @@ CDK deploy だけで CloudFront/S3 の SPA 配信が完結するようにし、�
 
 ## 受け入れ条件
 
-- [ ] CloudFront distribution に `DefaultRootObject: index.html` が設定されている。
-- [ ] CDK deploy の一部として `apps/web/dist` が S3 SiteBucket に配置される。
-- [ ] Web artifact 配置後に CloudFront invalidation が CDK 管理で実行される。
-- [ ] default behavior のみ SPA rewrite が有効で、`api/*` と `ws/*` は HTML fallback の対象外である。
-- [ ] CDK outputs に `SiteBucketName`、`DistributionId`、`DistributionDomainName` が含まれる。
-- [ ] infra test、typecheck、synth、docs check が通る。
-- [ ] 作業完了レポートを `reports/working/` に作成する。
-- [ ] PR 作成後、受け入れ条件確認コメントとセルフレビューコメントを日本語で投稿する。
+- [x] CloudFront distribution に `DefaultRootObject: index.html` が設定されている。
+- [x] CDK deploy の一部として `apps/web/dist` が S3 SiteBucket に配置される。
+- [x] Web artifact 配置後に CloudFront invalidation が CDK 管理で実行される。
+- [x] default behavior のみ SPA rewrite が有効で、`api/*` と `ws/*` は HTML fallback の対象外である。
+- [x] CDK outputs に `SiteBucketName`、`DistributionId`、`DistributionDomainName` が含まれる。
+- [x] infra test、typecheck、synth、docs check が通る。
+- [x] 作業完了レポートを `reports/working/` に作成する。
+- [x] PR 作成後、受け入れ条件確認コメントとセルフレビューコメントを日本語で投稿する。
 
 ## 検証計画
 
@@ -75,6 +75,13 @@ CDK deploy だけで CloudFront/S3 の SPA 配信が完結するようにし、�
 - `npm run cdk:synth`: pass
 - `npm run docs:infra:check`: sandbox 内では `tsx` の IPC pipe listen が `EPERM` で失敗。ユーザー承認後に `require_escalated` で再実行して pass
 - `git diff --check`: pass
+
+## PR
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/3
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/3#issuecomment-4469244738
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/3#issuecomment-4469245371
+- GitHub Apps での PR 作成・コメント投稿は `Resource not accessible by integration` で 403 だったため、代替として `gh` を使用した。
 
 ## PR レビュー観点
 

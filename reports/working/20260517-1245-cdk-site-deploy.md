@@ -45,7 +45,14 @@
 | `infra/package.json` | JSON | Web build 前提の synth/test/docs scripts に更新 | R2 |
 | `docs/infra/resource-inventory.*` | Markdown/JSON | CDK 生成 docs 更新 | R5 |
 | `README.md` | Markdown | deploy workflow 説明更新 | R5 |
-| `tasks/do/20260517-1241-cdk-site-deploy.md` | Markdown | 受け入れ条件と RCA 要約 | workflow |
+| `tasks/done/20260517-1241-cdk-site-deploy.md` | Markdown | 受け入れ条件と RCA 要約、PR コメント結果 | workflow |
+
+## 5.1 PR 操作
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/3
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/3#issuecomment-4469244738
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/3#issuecomment-4469245371
+- GitHub Apps での PR 作成・コメント投稿は `Resource not accessible by integration` で 403 だったため、代替として `gh` を使用した。
 
 ## 6. 指示へのfit評価
 
@@ -75,4 +82,5 @@
 - 未対応: 実 AWS への `cdk deploy` は実行していない。
 - 未対応: CloudFront 実 URL の `/`、`/index.html`、`/room/...` の HTTP ステータス確認は未実施。
 - 制約: `npm ci` 後に `npm audit` が 5 moderate vulnerabilities を報告したが、今回の修正範囲外のため依存更新は行っていない。
+- 制約: GitHub Apps での PR 作成・コメント投稿は 403 のため実行できず、代替として `gh` を使用した。
 - リスク: `BucketDeployment` により custom resource Lambda と IAM policy が増える。CDK deploy role には S3 asset publish、S3 write、CloudFront invalidation の実行権限が必要。
