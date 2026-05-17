@@ -52,7 +52,7 @@ export class HiramekiRelayStack extends Stack {
 
     const apiFunction = new LambdaFunction(this, "ApiFunction", {
       code: Code.fromAsset("../apps/api/dist"),
-      handler: "handler",
+      handler: "handler.handler",
       runtime: Runtime.NODEJS_22_X,
       architecture: Architecture.ARM_64,
       timeout: Duration.seconds(10),
