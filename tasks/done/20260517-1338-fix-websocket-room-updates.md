@@ -1,9 +1,10 @@
 # WebSocket ルーム参加通知修正
 
-- 状態: do
+- 状態: done
 - タスク種別: 修正
 - 作成日時: 2026-05-17 13:38 JST
 - ブランチ: `codex/fix-websocket-room-updates`
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/6
 
 ## 背景
 
@@ -71,13 +72,13 @@
 
 ## 受け入れ条件
 
-- [ ] 後からユーザーが参加したとき、同じルームの既存 WebSocket 接続へ通知される。
-- [ ] 通知 payload が room を識別でき、クライアントが最新 snapshot を取得できる。
-- [ ] Web UI が WebSocket 通知を受けてプレイヤー一覧を更新する。
-- [ ] ホスト画面で3人以上になったら開始ボタンがリロードなしで有効になる。
-- [ ] WebSocket ticket と connection が認可済み player / room に紐付く。
-- [ ] 関連する API/Web/infra 検証が pass している。
-- [ ] 実施内容と制約を `reports/working/` に記録している。
+- [x] 後からユーザーが参加したとき、同じルームの既存 WebSocket 接続へ通知される。
+- [x] 通知 payload が room を識別でき、クライアントが最新 snapshot を取得できる。
+- [x] Web UI が WebSocket 通知を受けてプレイヤー一覧を更新する。
+- [x] ホスト画面で3人以上になったら開始ボタンがリロードなしで有効になる。
+- [x] WebSocket ticket と connection が認可済み player / room に紐付く。
+- [x] 関連する API/Web/infra 検証が pass している。
+- [x] 実施内容と制約を `reports/working/` に記録している。
 
 ## 検証計画
 
@@ -126,3 +127,9 @@
 - 通知 payload は `type`, `roomId`, `reason`, `occurredAt` のみで、`playerToken`、`hostToken`、回答、非公開ヒントなどは含めない。
 - API Lambda の Management API 権限は対象 WebSocket API の `@connections/*` に限定される。
 - 本番 UI は API snapshot の実データだけを表示し、mock 参加者や固定人数 fallback は追加していない。
+
+## PR コメント結果
+
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/6#issuecomment-4469384947
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/6#issuecomment-4469385294
+- GitHub Apps コメント投稿は 403 で失敗したため、`gh pr comment` にフォールバックした。
