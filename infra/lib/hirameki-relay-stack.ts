@@ -13,7 +13,8 @@ import {
 } from "aws-cdk-lib/aws-cloudfront";
 import { HttpOrigin, S3BucketOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
-import { Architecture, Code, Function as LambdaFunction, Runtime } from "aws-cdk-lib/aws-lambda";
+import { Architecture, Code, Function as LambdaFunction, LoggingFormat, Runtime } from "aws-cdk-lib/aws-lambda";
+import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
@@ -50,6 +51,12 @@ export class HiramekiRelayStack extends Stack {
       sortKey: { name: "GSI1SK", type: AttributeType.STRING }
     });
 
+    const applicationLambdaLogGroup = new LogGroup(this, "ApplicationLambdaLogGroup", {
+      logGroupName: "/hirameki-relay/lambda",
+      retention: RetentionDays.TWO_YEARS,
+      removalPolicy: RemovalPolicy.RETAIN
+    });
+
     const apiFunction = new LambdaFunction(this, "ApiFunction", {
       code: Code.fromAsset("../apps/api/dist"),
       handler: "handler.handler",
@@ -57,6 +64,8 @@ export class HiramekiRelayStack extends Stack {
       architecture: Architecture.ARM_64,
       timeout: Duration.seconds(10),
       memorySize: 256,
+      loggingFormat: LoggingFormat.JSON,
+      logGroup: applicationLambdaLogGroup,
       environment: {
         GAME_TABLE_NAME: gameTable.tableName,
         CONNECTION_TABLE_NAME: connectionTable.tableName
@@ -69,6 +78,8 @@ export class HiramekiRelayStack extends Stack {
       runtime: Runtime.NODEJS_22_X,
       architecture: Architecture.ARM_64,
       timeout: Duration.seconds(5),
+      loggingFormat: LoggingFormat.JSON,
+      logGroup: applicationLambdaLogGroup,
       environment: {
         CONNECTION_TABLE_NAME: connectionTable.tableName
       }
@@ -80,6 +91,8 @@ export class HiramekiRelayStack extends Stack {
       runtime: Runtime.NODEJS_22_X,
       architecture: Architecture.ARM_64,
       timeout: Duration.seconds(5),
+      loggingFormat: LoggingFormat.JSON,
+      logGroup: applicationLambdaLogGroup,
       environment: {
         CONNECTION_TABLE_NAME: connectionTable.tableName
       }
@@ -91,6 +104,8 @@ export class HiramekiRelayStack extends Stack {
       runtime: Runtime.NODEJS_22_X,
       architecture: Architecture.ARM_64,
       timeout: Duration.seconds(10),
+      loggingFormat: LoggingFormat.JSON,
+      logGroup: applicationLambdaLogGroup,
       environment: {
         GAME_TABLE_NAME: gameTable.tableName,
         CONNECTION_TABLE_NAME: connectionTable.tableName

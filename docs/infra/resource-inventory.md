@@ -11,7 +11,7 @@
 ## 全体サマリ
 
 - 対象スタック: `HiramekiRelayStack`
-- CloudFormation resources: 40
+- CloudFormation resources: 41
 
 | 領域 | 件数 |
 | --- | ---: |
@@ -20,6 +20,7 @@
 | Compute | 9 |
 | API | 12 |
 | Delivery | 2 |
+| Observability | 1 |
 | Security/IAM | 10 |
 
 ## CloudFormation Type 別リソース数
@@ -39,6 +40,7 @@
 | `AWS::Lambda::Function` | 5 | Lambda function |
 | `AWS::Lambda::LayerVersion` | 1 | CloudFormation resource |
 | `AWS::Lambda::Permission` | 4 | Lambda invoke permission |
+| `AWS::Logs::LogGroup` | 1 | CloudWatch Logs log group |
 | `AWS::S3::Bucket` | 1 | S3 bucket |
 | `AWS::S3::BucketPolicy` | 1 | S3 bucket policy |
 | `Custom::CDKBucketDeployment` | 1 | CloudFormation resource |
@@ -74,16 +76,17 @@
 | `WsConnectFunctionServiceRoleCE3E3163` | `AWS::IAM::Role` | IAM role | `{"assumedBy":["Service:lambda.amazonaws.com"],"managedPolicyArns":[{"Fn::Join":["",["arn:",{"Ref":"AWS::Partition"},":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]]}]}` |
 | `WsDisconnectFunctionServiceRoleEBDDAD2B` | `AWS::IAM::Role` | IAM role | `{"assumedBy":["Service:lambda.amazonaws.com"],"managedPolicyArns":[{"Fn::Join":["",["arn:",{"Ref":"AWS::Partition"},":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]]}]}` |
 | `WsMessageFunctionServiceRole042576DF` | `AWS::IAM::Role` | IAM role | `{"assumedBy":["Service:lambda.amazonaws.com"],"managedPolicyArns":[{"Fn::Join":["",["arn:",{"Ref":"AWS::Partition"},":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]]}]}` |
-| `ApiFunctionCE271BD4` | `AWS::Lambda::Function` | Lambda function | `{"handler":"handler.handler","runtime":"nodejs22.x","architectures":["arm64"],"memorySize":256,"timeoutSeconds":10,"environment":{"Variables":{"GAME_TABLE_NAME":{"Ref":"GameTable0C79FC62"},"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
+| `ApiFunctionCE271BD4` | `AWS::Lambda::Function` | Lambda function | `{"handler":"handler.handler","runtime":"nodejs22.x","architectures":["arm64"],"memorySize":256,"timeoutSeconds":10,"loggingConfig":{"LogFormat":"JSON","LogGroup":{"Ref":"ApplicationLambdaLogGroup59F70C75"}},"environment":{"Variables":{"GAME_TABLE_NAME":{"Ref":"GameTable0C79FC62"},"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
 | `CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536` | `AWS::Lambda::Function` | Lambda function | `{"handler":"index.handler","runtime":"python3.13","timeoutSeconds":900,"environment":{"Variables":{"AWS_CA_BUNDLE":"/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"}}}` |
-| `WsConnectFunction1B8FD7A0` | `AWS::Lambda::Function` | Lambda function | `{"handler":"ws-handler.connectHandler","runtime":"nodejs22.x","architectures":["arm64"],"timeoutSeconds":5,"environment":{"Variables":{"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
-| `WsDisconnectFunction340F3D71` | `AWS::Lambda::Function` | Lambda function | `{"handler":"ws-handler.disconnectHandler","runtime":"nodejs22.x","architectures":["arm64"],"timeoutSeconds":5,"environment":{"Variables":{"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
-| `WsMessageFunction3772EA9D` | `AWS::Lambda::Function` | Lambda function | `{"handler":"ws-handler.messageHandler","runtime":"nodejs22.x","architectures":["arm64"],"timeoutSeconds":10,"environment":{"Variables":{"GAME_TABLE_NAME":{"Ref":"GameTable0C79FC62"},"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
+| `WsConnectFunction1B8FD7A0` | `AWS::Lambda::Function` | Lambda function | `{"handler":"ws-handler.connectHandler","runtime":"nodejs22.x","architectures":["arm64"],"timeoutSeconds":5,"loggingConfig":{"LogFormat":"JSON","LogGroup":{"Ref":"ApplicationLambdaLogGroup59F70C75"}},"environment":{"Variables":{"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
+| `WsDisconnectFunction340F3D71` | `AWS::Lambda::Function` | Lambda function | `{"handler":"ws-handler.disconnectHandler","runtime":"nodejs22.x","architectures":["arm64"],"timeoutSeconds":5,"loggingConfig":{"LogFormat":"JSON","LogGroup":{"Ref":"ApplicationLambdaLogGroup59F70C75"}},"environment":{"Variables":{"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
+| `WsMessageFunction3772EA9D` | `AWS::Lambda::Function` | Lambda function | `{"handler":"ws-handler.messageHandler","runtime":"nodejs22.x","architectures":["arm64"],"timeoutSeconds":10,"loggingConfig":{"LogFormat":"JSON","LogGroup":{"Ref":"ApplicationLambdaLogGroup59F70C75"}},"environment":{"Variables":{"GAME_TABLE_NAME":{"Ref":"GameTable0C79FC62"},"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
 | `SiteDeploymentAwsCliLayerADBDEF4E` | `AWS::Lambda::LayerVersion` | CloudFormation resource | `{"Content":{"S3Bucket":{"Fn::Sub":"cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"},"S3Key":"e2659170a0721541efa761a8d5d04d5e36cbbf691c4b15a9053002b7c825055d.zip"},"Description":"/opt/awscli/aws"}` |
 | `HttpApiANYapiproxyApiIntegrationPermission37A64BBC` | `AWS::Lambda::Permission` | Lambda invoke permission | `{"action":"lambda:InvokeFunction","principal":"apigateway.amazonaws.com","functionName":"GetAtt:ApiFunctionCE271BD4.Arn","sourceArn":"{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"HttpApiF5A9A8A7\"},\"/*/*/api/{proxy+}\"]]}"}` |
 | `WebSocketApiconnectRouteConnectIntegrationPermission39398969` | `AWS::Lambda::Permission` | Lambda invoke permission | `{"action":"lambda:InvokeFunction","principal":"apigateway.amazonaws.com","functionName":"GetAtt:WsConnectFunction1B8FD7A0.Arn","sourceArn":"{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"WebSocketApi34BCF99B\"},\"/*$connect\"]]}"}` |
 | `WebSocketApidefaultRouteDefaultIntegrationPermission0418F15D` | `AWS::Lambda::Permission` | Lambda invoke permission | `{"action":"lambda:InvokeFunction","principal":"apigateway.amazonaws.com","functionName":"GetAtt:WsMessageFunction3772EA9D.Arn","sourceArn":"{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"WebSocketApi34BCF99B\"},\"/*$default\"]]}"}` |
 | `WebSocketApidisconnectRouteDisconnectIntegrationPermissionAE705904` | `AWS::Lambda::Permission` | Lambda invoke permission | `{"action":"lambda:InvokeFunction","principal":"apigateway.amazonaws.com","functionName":"GetAtt:WsDisconnectFunction340F3D71.Arn","sourceArn":"{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"WebSocketApi34BCF99B\"},\"/*$disconnect\"]]}"}` |
+| `ApplicationLambdaLogGroup59F70C75` | `AWS::Logs::LogGroup` | CloudWatch Logs log group | `{"logGroupName":"/hirameki-relay/lambda","retentionInDays":731}` |
 | `SiteBucket397A1860` | `AWS::S3::Bucket` | S3 bucket | `{"encryption":{"ServerSideEncryptionConfiguration":[{"ServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]},"publicAccessBlock":{"BlockPublicAcls":true,"BlockPublicPolicy":true,"IgnorePublicAcls":true,"RestrictPublicBuckets":true}}` |
 | `SiteBucketPolicy3AC1D0F8` | `AWS::S3::BucketPolicy` | S3 bucket policy | `{"bucket":"Ref:SiteBucket397A1860","statementCount":2,"actions":["s3:*","s3:GetObject"],"resources":["GetAtt:SiteBucket397A1860.Arn","{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"SiteBucket397A1860\",\"Arn\"]},\"/*\"]]}"]}` |
 | `SiteDeploymentCustomResource42D55606` | `Custom::CDKBucketDeployment` | CloudFormation resource | `{"ServiceToken":"<masked-or-reference>","SourceBucketNames":[{"Fn::Sub":"cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"}],"SourceObjectKeys":["04a40f67deec277dbc81efbf5b83211d62c67b8ce0c605ada16e952f1928a9e5.zip"],"DestinationBucketName":{"Ref":"SiteBucket397A1860"},"WaitForDistributionInvalidation":true,"Prune":true,"DistributionId":{"Ref":"Distribution830FAC52"},"DistributionPaths":["/*"],"OutputObjectKeys":true}` |

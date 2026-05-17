@@ -2,7 +2,7 @@
   "generatedBy": "infra/scripts/generate-infra-docs.ts",
   "source": "infra/lib/hirameki-relay-stack.ts",
   "stackName": "HiramekiRelayStack",
-  "totalResources": 40,
+  "totalResources": 41,
   "totalsByDomain": [
     {
       "domain": "Storage",
@@ -23,6 +23,10 @@
     {
       "domain": "Delivery",
       "count": 2
+    },
+    {
+      "domain": "Observability",
+      "count": 1
     },
     {
       "domain": "Security/IAM",
@@ -94,6 +98,11 @@
       "type": "AWS::Lambda::Permission",
       "count": 4,
       "purpose": "Lambda invoke permission"
+    },
+    {
+      "type": "AWS::Logs::LogGroup",
+      "count": 1,
+      "purpose": "CloudWatch Logs log group"
     },
     {
       "type": "AWS::S3::Bucket",
@@ -674,6 +683,12 @@
         ],
         "memorySize": 256,
         "timeoutSeconds": 10,
+        "loggingConfig": {
+          "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "ApplicationLambdaLogGroup59F70C75"
+          }
+        },
         "environment": {
           "Variables": {
             "GAME_TABLE_NAME": {
@@ -712,6 +727,12 @@
           "arm64"
         ],
         "timeoutSeconds": 5,
+        "loggingConfig": {
+          "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "ApplicationLambdaLogGroup59F70C75"
+          }
+        },
         "environment": {
           "Variables": {
             "CONNECTION_TABLE_NAME": {
@@ -732,6 +753,12 @@
           "arm64"
         ],
         "timeoutSeconds": 5,
+        "loggingConfig": {
+          "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "ApplicationLambdaLogGroup59F70C75"
+          }
+        },
         "environment": {
           "Variables": {
             "CONNECTION_TABLE_NAME": {
@@ -752,6 +779,12 @@
           "arm64"
         ],
         "timeoutSeconds": 10,
+        "loggingConfig": {
+          "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "ApplicationLambdaLogGroup59F70C75"
+          }
+        },
         "environment": {
           "Variables": {
             "GAME_TABLE_NAME": {
@@ -820,6 +853,15 @@
         "principal": "apigateway.amazonaws.com",
         "functionName": "GetAtt:WsDisconnectFunction340F3D71.Arn",
         "sourceArn": "{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"WebSocketApi34BCF99B\"},\"/*$disconnect\"]]}"
+      }
+    },
+    {
+      "logicalId": "ApplicationLambdaLogGroup59F70C75",
+      "type": "AWS::Logs::LogGroup",
+      "purpose": "CloudWatch Logs log group",
+      "settings": {
+        "logGroupName": "/hirameki-relay/lambda",
+        "retentionInDays": 731
       }
     },
     {
