@@ -1,6 +1,6 @@
 # Web WebSocket 同期単体テスト追加
 
-- 状態: doing
+- 状態: done
 - タスク種別: 機能追加
 - 作成日時: 2026-05-17 22:13 JST
 - ブランチ: `codex/web-ws-sync-tests`
@@ -36,14 +36,14 @@ Web 側に最初に必要な単体テストを追加し、`reason: "game.started
 
 ## 受け入れ条件
 
-- [ ] `room.snapshot.updated` parser が `reason: "game.started"` を受け入れる単体テストがある。
-- [ ] WebSocket URL resolver の代表ケースを固定する単体テストがある。
-- [ ] 同一 `roomId` の `room.snapshot.updated(reason: "game.started")` 受信で `fetchSnapshot()` が再実行されるテストがある。
-- [ ] 別 `roomId` の通知では `fetchSnapshot()` が追加実行されないテストがある。
-- [ ] 非ホスト Lobby が `game.started` 通知後に HINT_SUBMITTING 画面へ遷移するテストがある。
-- [ ] `npm run test -w @hirameki-relay/web` が pass する。
-- [ ] web TypeScript 変更に対する typecheck が pass する。
-- [ ] 作業レポートを `reports/working/` に保存する。
+- [x] `room.snapshot.updated` parser が `reason: "game.started"` を受け入れる単体テストがある。
+- [x] WebSocket URL resolver の代表ケースを固定する単体テストがある。
+- [x] 同一 `roomId` の `room.snapshot.updated(reason: "game.started")` 受信で `fetchSnapshot()` が再実行されるテストがある。
+- [x] 別 `roomId` の通知では `fetchSnapshot()` が追加実行されないテストがある。
+- [x] 非ホスト Lobby が `game.started` 通知後に HINT_SUBMITTING 画面へ遷移するテストがある。
+- [x] `npm run test -w @hirameki-relay/web` が pass する。
+- [x] web TypeScript 変更に対する typecheck が pass する。
+- [x] 作業レポートを `reports/working/` に保存する。
 
 ## 検証計画
 
@@ -60,3 +60,24 @@ Web 側に最初に必要な単体テストを追加し、`reason: "game.started
 ## リスク
 
 - component test はブラウザ実機の WebSocket 接続を検証しない。接続先環境の疎通は別途 smoke / E2E の対象とする。
+
+## 実施結果
+
+- `apps/web/src/websocket.ts` に WebSocket URL resolver と `room.snapshot.updated` parser を切り出した。
+- `apps/web/src/websocket.test.ts` に URL 解決と parser の単体テストを追加した。
+- `apps/web/src/App.test.tsx` に WebSocket 同期の component test を追加した。
+- `apps/web` に jsdom / Testing Library / jest-dom と Vitest setup を追加した。
+- 作業レポート: `reports/working/20260517-2221-web-ws-sync-tests.md`
+
+## 検証結果
+
+- `npm run test -w @hirameki-relay/web`: pass
+- `npm run typecheck -w @hirameki-relay/web`: pass
+- `git diff --check`: pass
+
+## PR
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/11
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/11#issuecomment-4470854673
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/11#issuecomment-4470855060
+- 備考: GitHub Apps での PR 作成・コメント投稿は 403 `Resource not accessible by integration` だったため、`gh` へフォールバックした。
