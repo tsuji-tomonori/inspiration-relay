@@ -14,9 +14,11 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@hono/node-server": "^1.13.8",
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.1048.0",
+    "@aws-sdk/client-dynamodb": "^3.1048.0",
     "@hirameki-relay/game-core": "0.1.0",
     "@hirameki-relay/shared": "0.1.0",
+    "@hono/node-server": "^1.13.8",
     "hono": "^4.6.12"
   },
   "devDependencies": {

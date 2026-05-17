@@ -2,11 +2,14 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { openApiDocument } from "./openapi";
+import { createRealtimeRepositoryFromEnv, createRoomEventBroadcasterFromEnv } from "./realtime";
 import { ApiError, GameService } from "./service";
-import { MemoryRoomRepository } from "./store";
+import { createRoomRepositoryFromEnv } from "./store";
 
-export const repository = new MemoryRoomRepository();
-export const gameService = new GameService(repository);
+export const repository = createRoomRepositoryFromEnv();
+export const realtimeRepository = createRealtimeRepositoryFromEnv();
+export const roomEventBroadcaster = createRoomEventBroadcasterFromEnv(realtimeRepository);
+export const gameService = new GameService(repository, realtimeRepository, roomEventBroadcaster);
 
 export function createApp(service = gameService): Hono {
   const app = new Hono();

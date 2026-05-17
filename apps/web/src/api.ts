@@ -7,6 +7,12 @@ export interface SessionTokens {
   hostToken?: string;
 }
 
+export interface WebSocketTicketResponse {
+  ticket: string;
+  expiresIn: number;
+  wsUrl: string;
+}
+
 export async function createRoom(input: { nickname: string; avatarId: string }): Promise<SessionResponse> {
   return request("/api/v1/rooms", {
     method: "POST",
@@ -24,6 +30,13 @@ export async function joinRoom(roomId: string, input: { nickname: string; avatar
 export async function fetchSnapshot(roomId: string, tokens: SessionTokens): Promise<RoomSnapshot> {
   return request(`/api/v1/rooms/${roomId}/snapshot`, {
     headers: guestHeaders(tokens.playerToken)
+  });
+}
+
+export async function fetchWebSocketTicket(roomId: string, playerToken: string): Promise<WebSocketTicketResponse> {
+  return request(`/api/v1/rooms/${roomId}/ws-ticket`, {
+    method: "POST",
+    headers: guestHeaders(playerToken)
   });
 }
 

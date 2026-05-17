@@ -1,4 +1,5 @@
 import { createHash, randomBytes, randomUUID } from "node:crypto";
+import { DynamoDBClient, GetItemCommand, PutItemCommand, type AttributeValue } from "@aws-sdk/client-dynamodb";
 import { defaultRoomSettings, initialTopics, type AvatarId, type Hint, type Player, type RoomSettings, type RoomStatus, type Round, type Topic } from "@hirameki-relay/shared";
 
 export interface StoredRoom {
@@ -47,6 +48,42 @@ export class MemoryRoomRepository implements RoomRepository {
   async saveRoomState(state: RoomState): Promise<void> {
     this.rooms.set(state.room.roomId, structuredClone(state));
   }
+}
+
+export class DynamoRoomRepository implements RoomRepository {
+  constructor(
+    private readonly tableName: string,
+    private readonly client = new DynamoDBClient({})
+  ) {}
+
+  async getRoomState(roomId: string): Promise<RoomState | null> {
+    const result = await this.client.send(new GetItemCommand({
+      TableName: this.tableName,
+      Key: roomKey(roomId)
+    }));
+    const rawState = result.Item?.state?.S;
+    if (!rawState) {
+      return null;
+    }
+    return JSON.parse(rawState) as RoomState;
+  }
+
+  async saveRoomState(state: RoomState): Promise<void> {
+    await this.client.send(new PutItemCommand({
+      TableName: this.tableName,
+      Item: {
+        ...roomKey(state.room.roomId),
+        roomId: { S: state.room.roomId },
+        ttl: { N: String(state.room.ttl) },
+        state: { S: JSON.stringify(state) }
+      }
+    }));
+  }
+}
+
+export function createRoomRepositoryFromEnv(): RoomRepository {
+  const tableName = process.env.GAME_TABLE_NAME;
+  return tableName ? new DynamoRoomRepository(tableName) : new MemoryRoomRepository();
 }
 
 export function makeInitialRoom(nickname: string, avatarId: AvatarId, now = new Date()): { state: RoomState; playerToken: string; hostToken: string } {
@@ -125,4 +162,11 @@ export function randomToken(): string {
 function generateRoomId(): string {
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   return Array.from({ length: 6 }, () => alphabet[Math.floor(Math.random() * alphabet.length)] ?? "A").join("");
+}
+
+function roomKey(roomId: string): Record<string, AttributeValue> {
+  return {
+    PK: { S: `ROOM#${roomId.toUpperCase()}` },
+    SK: { S: "STATE" }
+  };
 }

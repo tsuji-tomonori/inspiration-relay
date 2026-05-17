@@ -422,11 +422,13 @@
           "dynamodb:PutItem",
           "dynamodb:Query",
           "dynamodb:Scan",
-          "dynamodb:UpdateItem"
+          "dynamodb:UpdateItem",
+          "execute-api:ManageConnections"
         ],
         "resources": [
           "GetAtt:ConnectionTable0C6E1E44.Arn",
           "GetAtt:GameTable0C79FC62.Arn",
+          "{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"WebSocketApi34BCF99B\"},\"/*/*/@connections/*\"]]}",
           "{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"ConnectionTable0C6E1E44\",\"Arn\"]},\"/index/*\"]]}"
         ]
       }
@@ -696,6 +698,46 @@
             },
             "CONNECTION_TABLE_NAME": {
               "Ref": "ConnectionTable0C6E1E44"
+            },
+            "WEBSOCKET_URL": "/ws/v1",
+            "WEBSOCKET_MANAGEMENT_ENDPOINT": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Fn::Select": [
+                      2,
+                      {
+                        "Fn::Split": [
+                          "/",
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "wss://",
+                                {
+                                  "Ref": "WebSocketApi34BCF99B"
+                                },
+                                ".execute-api.",
+                                {
+                                  "Ref": "AWS::Region"
+                                },
+                                ".",
+                                {
+                                  "Ref": "AWS::URLSuffix"
+                                },
+                                "/v1"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "/v1"
+                ]
+              ]
             }
           }
         }
@@ -915,7 +957,7 @@
           }
         ],
         "SourceObjectKeys": [
-          "04a40f67deec277dbc81efbf5b83211d62c67b8ce0c605ada16e952f1928a9e5.zip"
+          "ceba59d3e631e96b095c6104543ba45e5b10a78d1174be2da23450cad45eccdc.zip"
         ],
         "DestinationBucketName": {
           "Ref": "SiteBucket397A1860"

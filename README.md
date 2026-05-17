@@ -73,7 +73,7 @@ The deploy workflow does not create AWS credentials by itself. Configure the tar
 - No user accounts, email login, SNS login, Cognito login, or paid features.
 - Room participation uses room-scoped `playerToken`.
 - Host operations use room-scoped `hostToken`.
-- WebSocket connections are designed to use short-lived tickets.
+- WebSocket connections use short-lived tickets and receive room update notifications; clients refresh authorized REST snapshots after those notifications.
 - The server is authoritative for role checks, hint ordering, answer judgement, and scoring.
 
 ## Assets

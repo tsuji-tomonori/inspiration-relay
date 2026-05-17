@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { displayPoints } from "@hirameki-relay/game-core";
 import { avatarIds, type AvatarId, type Player, type RoomSnapshot } from "@hirameki-relay/shared";
-import { createRoom, fetchSnapshot, joinRoom, nextRound, skipAnswer, startGame, submitAnswer, submitHint, type SessionTokens } from "./api";
+import { createRoom, fetchSnapshot, fetchWebSocketTicket, joinRoom, nextRound, skipAnswer, startGame, submitAnswer, submitHint, type SessionTokens } from "./api";
 import { assets } from "./assets";
 
 type ModalMode = "create" | "join" | null;
@@ -15,6 +15,13 @@ interface StoredSession {
   hostToken?: string;
 }
 
+interface RoomSnapshotUpdatedMessage {
+  type: "room.snapshot.updated";
+  roomId: string;
+  reason: string;
+  occurredAt: string;
+}
+
 export function App() {
   const [snapshot, setSnapshot] = useState<RoomSnapshot | null>(null);
   const [session, setSession] = useState<StoredSession | null>(() => readSession());
@@ -22,16 +29,83 @@ export function App() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  const refreshSnapshot = useCallback(async (activeSession: StoredSession) => {
+    const nextSnapshot = await fetchSnapshot(activeSession.roomId, activeSession);
+    setSnapshot(nextSnapshot);
+  }, []);
+
   useEffect(() => {
     if (!session) {
       return;
     }
-    fetchSnapshot(session.roomId, session).then(setSnapshot).catch((caught: unknown) => {
+    refreshSnapshot(session).catch((caught: unknown) => {
       setError(caught instanceof Error ? caught.message : "ルームの復帰に失敗しました");
       clearSession();
       setSession(null);
     });
-  }, [session?.roomId, session?.playerToken]);
+  }, [refreshSnapshot, session?.roomId, session?.playerToken]);
+
+  useEffect(() => {
+    if (!session) {
+      return;
+    }
+
+    let cancelled = false;
+    let socket: WebSocket | null = null;
+    let retryCount = 0;
+    let reconnectTimer: number | undefined;
+
+    const scheduleReconnect = () => {
+      if (cancelled) {
+        return;
+      }
+      const delay = Math.min(1000 * 2 ** retryCount, 10000);
+      retryCount += 1;
+      reconnectTimer = window.setTimeout(() => {
+        void connect();
+      }, delay);
+    };
+
+    const connect = async () => {
+      try {
+        const ticket = await fetchWebSocketTicket(session.roomId, session.playerToken);
+        if (cancelled) {
+          return;
+        }
+        socket = new WebSocket(resolveWebSocketUrl(ticket.wsUrl));
+        socket.addEventListener("open", () => {
+          retryCount = 0;
+        });
+        socket.addEventListener("message", (event) => {
+          const message = parseRoomSnapshotUpdatedMessage(event.data);
+          if (!message || message.roomId !== session.roomId) {
+            return;
+          }
+          refreshSnapshot(session).catch((caught: unknown) => {
+            setError(caught instanceof Error ? caught.message : "ルーム状態の更新に失敗しました");
+          });
+        });
+        socket.addEventListener("close", () => {
+          scheduleReconnect();
+        });
+        socket.addEventListener("error", () => {
+          socket?.close();
+        });
+      } catch {
+        scheduleReconnect();
+      }
+    };
+
+    void connect();
+
+    return () => {
+      cancelled = true;
+      if (reconnectTimer) {
+        window.clearTimeout(reconnectTimer);
+      }
+      socket?.close();
+    };
+  }, [refreshSnapshot, session?.roomId, session?.playerToken]);
 
   const sortedPlayers = useMemo(() => [...(snapshot?.players ?? [])].sort((a, b) => b.score - a.score), [snapshot?.players]);
 
@@ -424,4 +498,34 @@ function saveSession(session: StoredSession): void {
 
 function clearSession(): void {
   sessionStorage.removeItem(storageKey);
+}
+
+function resolveWebSocketUrl(wsUrl: string): string {
+  const url = new URL(wsUrl, window.location.href);
+  if (url.protocol === "http:") {
+    url.protocol = "ws:";
+  } else if (url.protocol === "https:") {
+    url.protocol = "wss:";
+  }
+  return url.toString();
+}
+
+function parseRoomSnapshotUpdatedMessage(data: unknown): RoomSnapshotUpdatedMessage | null {
+  if (typeof data !== "string") {
+    return null;
+  }
+  try {
+    const parsed = JSON.parse(data) as Partial<RoomSnapshotUpdatedMessage>;
+    if (parsed.type !== "room.snapshot.updated" || typeof parsed.roomId !== "string") {
+      return null;
+    }
+    return {
+      type: "room.snapshot.updated",
+      roomId: parsed.roomId,
+      reason: typeof parsed.reason === "string" ? parsed.reason : "",
+      occurredAt: typeof parsed.occurredAt === "string" ? parsed.occurredAt : ""
+    };
+  } catch {
+    return null;
+  }
 }
