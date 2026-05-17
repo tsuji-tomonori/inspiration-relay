@@ -1,9 +1,10 @@
 # ゲーム状態変更 WebSocket 同期修正
 
-- 状態: do
+- 状態: done
 - タスク種別: 修正
 - 作成日時: 2026-05-17 19:07 JST
 - ブランチ: `codex/fix-ws-game-sync`
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/8
 
 ## 背景
 
@@ -73,15 +74,15 @@
 
 ## 受け入れ条件
 
-- [ ] 3人接続済みでホストが開始すると、`game.started` reason の `room.snapshot.updated` が broadcast される。
-- [ ] ヒント投稿時に `hint.submitted` または `answering.started` reason の更新通知が broadcast される。
-- [ ] 不正解・skip 時に `hint.revealed`、結果確定時に `round.result` reason の更新通知が broadcast される。
-- [ ] 次ラウンド開始時に `round.started`、最終結果遷移時に `game.result` reason の更新通知が broadcast される。
-- [ ] ホストが回答者のときもお題が非表示になり、回答 UI のみが有効になる。
-- [ ] ホストが回答者でないときは回答 UI が有効にならない。
-- [ ] フロントは `room.snapshot.updated` を受けて snapshot を再取得する既存モデルを維持する。
-- [ ] 関連する API/Web/shared typecheck と API tests が pass している。
-- [ ] 作業内容と未検証事項を `reports/working/` に記録している。
+- [x] 3人接続済みでホストが開始すると、`game.started` reason の `room.snapshot.updated` が broadcast される。
+- [x] ヒント投稿時に `hint.submitted` または `answering.started` reason の更新通知が broadcast される。
+- [x] 不正解・skip 時に `hint.revealed`、結果確定時に `round.result` reason の更新通知が broadcast される。
+- [x] 次ラウンド開始時に `round.started`、最終結果遷移時に `game.result` reason の更新通知が broadcast される。
+- [x] ホストが回答者のときもお題が非表示になり、回答 UI のみが有効になる。
+- [x] ホストが回答者でないときは回答 UI が有効にならない。
+- [x] フロントは `room.snapshot.updated` を受けて snapshot を再取得する既存モデルを維持する。
+- [x] 関連する API/Web/shared typecheck と API tests が pass している。
+- [x] 作業内容と未検証事項を `reports/working/` に記録している。
 
 ## 検証計画
 
@@ -133,3 +134,9 @@
 
 - WebSocket `$default` の command 実行化（`game.start` など）は今回の直接修正範囲外。既存 HTTP command から同じ `GameService` を通る経路で broadcast する修正を優先した。
 - 実 AWS WebSocket 接続での複数クライアント E2E は未実施。
+
+## PR コメント結果
+
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/8#issuecomment-4470289334
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/8#issuecomment-4470290154
+- GitHub Apps コメント投稿は 403 で失敗したため、`gh pr comment` にフォールバックした。
