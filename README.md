@@ -74,6 +74,7 @@ The deploy workflow does not create AWS credentials by itself. Configure the tar
 - Room participation uses room-scoped `playerToken`.
 - Host operations use room-scoped `hostToken`.
 - WebSocket connections use short-lived tickets and receive room update notifications; clients refresh authorized REST snapshots after those notifications.
+- WebSocket tickets return the API Gateway WebSocket stage URL directly, avoiding CloudFront path rewriting for the upgrade request.
 - The server is authoritative for role checks, hint ordering, answer judgement, and scoring.
 
 ## Assets

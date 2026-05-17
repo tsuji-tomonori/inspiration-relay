@@ -699,7 +699,26 @@
             "CONNECTION_TABLE_NAME": {
               "Ref": "ConnectionTable0C6E1E44"
             },
-            "WEBSOCKET_URL": "/ws/v1",
+            "WEBSOCKET_URL": {
+              "Fn::Join": [
+                "",
+                [
+                  "wss://",
+                  {
+                    "Ref": "WebSocketApi34BCF99B"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/v1"
+                ]
+              ]
+            },
             "WEBSOCKET_MANAGEMENT_ENDPOINT": {
               "Fn::Join": [
                 "",
@@ -957,7 +976,7 @@
           }
         ],
         "SourceObjectKeys": [
-          "ceba59d3e631e96b095c6104543ba45e5b10a78d1174be2da23450cad45eccdc.zip"
+          "6a13510fff877047e8d88f613e80a61de464e82f046f98f6700340aa1f6b85a0.zip"
         ],
         "DestinationBucketName": {
           "Ref": "SiteBucket397A1860"

@@ -150,7 +150,7 @@ export class HiramekiRelayStack extends Stack {
 
     const httpDomain = Fn.select(2, Fn.split("/", httpApi.apiEndpoint));
     const wsDomain = Fn.select(2, Fn.split("/", websocketStage.url));
-    apiFunction.addEnvironment("WEBSOCKET_URL", "/ws/v1");
+    apiFunction.addEnvironment("WEBSOCKET_URL", websocketStage.url);
     apiFunction.addEnvironment("WEBSOCKET_MANAGEMENT_ENDPOINT", Fn.join("", ["https://", wsDomain, "/v1"]));
     websocketApi.grantManageConnections(apiFunction);
 
