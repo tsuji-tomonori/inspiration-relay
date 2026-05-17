@@ -1099,7 +1099,8 @@
           "round",
           "hints",
           "submittedHintPlayerIds",
-          "viewerRole"
+          "viewerRole",
+          "permissions"
         ],
         "properties": {
           "roomId": {
@@ -1157,15 +1158,40 @@
           "viewerRole": {
             "type": "string",
             "enum": [
-              "host",
               "answerer",
               "hinter",
               "spectator",
               "unknown"
             ]
           },
+          "permissions": {
+            "$ref": "#/components/schemas/RoomPermissions"
+          },
           "wsUrl": {
             "type": "string"
+          }
+        }
+      },
+      "RoomPermissions": {
+        "type": "object",
+        "required": [
+          "canStartGame",
+          "canGoNextRound",
+          "canSubmitAnswer",
+          "canSubmitHint"
+        ],
+        "properties": {
+          "canStartGame": {
+            "type": "boolean"
+          },
+          "canGoNextRound": {
+            "type": "boolean"
+          },
+          "canSubmitAnswer": {
+            "type": "boolean"
+          },
+          "canSubmitHint": {
+            "type": "boolean"
           }
         }
       },

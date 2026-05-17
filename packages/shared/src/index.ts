@@ -73,8 +73,16 @@ export interface RoomSnapshot {
   hints: PublicHint[];
   submittedHintPlayerIds: string[];
   viewerPlayerId?: string;
-  viewerRole: "host" | "answerer" | "hinter" | "spectator" | "unknown";
+  viewerRole: "answerer" | "hinter" | "spectator" | "unknown";
+  permissions: RoomPermissions;
   wsUrl?: string;
+}
+
+export interface RoomPermissions {
+  canStartGame: boolean;
+  canGoNextRound: boolean;
+  canSubmitAnswer: boolean;
+  canSubmitHint: boolean;
 }
 
 export interface SessionResponse {

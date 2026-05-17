@@ -1,7 +1,16 @@
 import { ApiGatewayManagementApiClient, GoneException, PostToConnectionCommand } from "@aws-sdk/client-apigatewaymanagementapi";
 import { DeleteItemCommand, DynamoDBClient, PutItemCommand, QueryCommand, type AttributeValue } from "@aws-sdk/client-dynamodb";
 
-export type RoomUpdateReason = "player.joined";
+export type RoomUpdateReason =
+  | "player.joined"
+  | "player.left"
+  | "game.started"
+  | "round.started"
+  | "hint.submitted"
+  | "answering.started"
+  | "hint.revealed"
+  | "round.result"
+  | "game.result";
 
 export interface RoomUpdateEvent {
   type: "room.snapshot.updated";
