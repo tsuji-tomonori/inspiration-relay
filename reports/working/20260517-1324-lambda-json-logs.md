@@ -44,7 +44,14 @@
 | `infra/test/hirameki-relay-stack.test.ts` | TypeScript test | CDK assertion test | R3 |
 | `infra/scripts/generate-infra-docs.ts` | TypeScript | inventory の Log Group / LoggingConfig 対応 | R4 |
 | `docs/infra/resource-inventory.*` | Markdown / JSON | 生成インフラ inventory 更新 | R4 |
-| `tasks/do/20260517-1320-lambda-json-logs.md` | Markdown | task 管理と受け入れ条件 | R5 |
+| `tasks/done/20260517-1320-lambda-json-logs.md` | Markdown | task 管理と受け入れ条件 | R5 |
+
+PR とコメント:
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/5
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/5#issuecomment-4469339548
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/5#issuecomment-4469340362
+- GitHub Apps コメント投稿は 403 で失敗したため、PR 作成とコメント投稿は `gh` にフォールバックした。
 
 ## 6. 実行した検証
 

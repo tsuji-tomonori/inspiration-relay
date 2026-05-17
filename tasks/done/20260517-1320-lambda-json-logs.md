@@ -1,6 +1,6 @@
 # Lambda ログ集約と JSON 化
 
-- 状態: do
+- 状態: done
 - タスク種別: 機能追加
 - 作成日時: 2026-05-17 13:20 JST
 
@@ -78,3 +78,10 @@ CDK で定義されたアプリケーション Lambda のログを単一 CloudWa
 
 - `cdk deploy`: 未実施。理由: AWS 実環境を変更する操作であり、今回の実装 PR 範囲に含めていないため。
 - CloudWatch Logs 実出力確認: 未実施。理由: deploy 未実施のため。
+
+## PR
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/5
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/5#issuecomment-4469339548
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/5#issuecomment-4469340362
+- GitHub Apps コメント投稿は 403 で失敗したため、PR 作成とコメント投稿は `gh` にフォールバックした。
