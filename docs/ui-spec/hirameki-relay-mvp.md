@@ -95,7 +95,7 @@
 
 - Exact font from the mock is unavailable, so Japanese system rounded fallback is used.
 - The mock shows several static labels and panel images; MVP uses CSS panels plus exact asset images where interaction or responsive layout would otherwise be impaired.
-- Browser clients subscribe to room WebSocket updates with short-lived tickets. `room.snapshot.updated` notifications prompt the UI to refresh the authorized REST snapshot.
+- Browser clients subscribe to room WebSocket updates with short-lived tickets. `room.snapshot.updated` notifications and WebSocket open/reconnect events prompt the UI to refresh the authorized REST snapshot.
 
 ## Acceptance Checklist
 

@@ -75,6 +75,9 @@ export function App() {
         socket = new WebSocket(resolveWebSocketUrl(ticket.wsUrl));
         socket.addEventListener("open", () => {
           retryCount = 0;
+          refreshSnapshot(session).catch((caught: unknown) => {
+            setError(caught instanceof Error ? caught.message : "ルーム状態の更新に失敗しました");
+          });
         });
         socket.addEventListener("message", (event) => {
           const message = parseRoomSnapshotUpdatedMessage(event.data);

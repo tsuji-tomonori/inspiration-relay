@@ -65,12 +65,13 @@ describe("HiramekiRelayStack", () => {
     const app = new App();
     const stack = new HiramekiRelayStack(app, "TestStack");
     const template = Template.fromStack(stack);
+    const synthesized = template.toJSON();
 
     template.hasResourceProperties("AWS::Lambda::Function", {
       Handler: "handler.handler",
       Environment: Match.objectLike({
         Variables: Match.objectLike({
-          WEBSOCKET_URL: "/ws/v1",
+          WEBSOCKET_URL: Match.anyValue(),
           WEBSOCKET_MANAGEMENT_ENDPOINT: Match.anyValue()
         })
       })
@@ -85,6 +86,16 @@ describe("HiramekiRelayStack", () => {
         ])
       })
     });
+
+    const apiFunction = Object.values(synthesized.Resources).find(
+      (resource) =>
+        typeof resource === "object" &&
+        resource !== null &&
+        (resource as { Type?: string; Properties?: { Handler?: string } }).Type === "AWS::Lambda::Function" &&
+        (resource as { Properties?: { Handler?: string } }).Properties?.Handler === "handler.handler"
+    ) as { Properties: { Environment: { Variables: { WEBSOCKET_URL: unknown; WEBSOCKET_MANAGEMENT_ENDPOINT: unknown } } } };
+    expect(apiFunction.Properties.Environment.Variables.WEBSOCKET_URL).not.toBe("/ws/v1");
+    expect(JSON.stringify(apiFunction.Properties.Environment.Variables.WEBSOCKET_URL)).toContain("WebSocketApi");
   });
 
   it("deploys web assets and serves the SPA from CloudFront", () => {
