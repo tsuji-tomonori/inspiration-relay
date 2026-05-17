@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "docs:infra": "npm run build -w @hirameki-relay/api && tsx scripts/generate-infra-docs.ts",
-    "docs:infra:check": "npm run build -w @hirameki-relay/api && tsx scripts/generate-infra-docs.ts --check",
+    "docs:infra": "npm run build -w @hirameki-relay/api && npm run build -w @hirameki-relay/web && tsx scripts/generate-infra-docs.ts",
+    "docs:infra:check": "npm run build -w @hirameki-relay/api && npm run build -w @hirameki-relay/web && tsx scripts/generate-infra-docs.ts --check",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "synth": "npm run build -w @hirameki-relay/api && cdk synth",
-    "test": "npm run build -w @hirameki-relay/api && vitest run"
+    "synth": "npm run build -w @hirameki-relay/api && npm run build -w @hirameki-relay/web && cdk synth",
+    "test": "npm run build -w @hirameki-relay/api && npm run build -w @hirameki-relay/web && vitest run"
   },
   "dependencies": {
     "aws-cdk-lib": "^2.173.0",

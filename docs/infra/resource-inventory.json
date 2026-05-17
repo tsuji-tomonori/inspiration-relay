@@ -2,7 +2,7 @@
   "generatedBy": "infra/scripts/generate-infra-docs.ts",
   "source": "infra/lib/hirameki-relay-stack.ts",
   "stackName": "HiramekiRelayStack",
-  "totalResources": 34,
+  "totalResources": 40,
   "totalsByDomain": [
     {
       "domain": "Storage",
@@ -14,7 +14,7 @@
     },
     {
       "domain": "Compute",
-      "count": 8
+      "count": 9
     },
     {
       "domain": "API",
@@ -26,7 +26,7 @@
     },
     {
       "domain": "Security/IAM",
-      "count": 8
+      "count": 10
     }
   ],
   "countsByType": [
@@ -56,6 +56,11 @@
       "purpose": "CloudFront distribution"
     },
     {
+      "type": "AWS::CloudFront::Function",
+      "count": 1,
+      "purpose": "CloudFormation resource"
+    },
+    {
       "type": "AWS::CloudFront::OriginAccessControl",
       "count": 1,
       "purpose": "CloudFront origin access control"
@@ -67,18 +72,23 @@
     },
     {
       "type": "AWS::IAM::Policy",
-      "count": 4,
+      "count": 5,
       "purpose": "IAM inline policy"
     },
     {
       "type": "AWS::IAM::Role",
-      "count": 4,
+      "count": 5,
       "purpose": "IAM role"
     },
     {
       "type": "AWS::Lambda::Function",
-      "count": 4,
+      "count": 5,
       "purpose": "Lambda function"
+    },
+    {
+      "type": "AWS::Lambda::LayerVersion",
+      "count": 1,
+      "purpose": "CloudFormation resource"
     },
     {
       "type": "AWS::Lambda::Permission",
@@ -94,6 +104,11 @@
       "type": "AWS::S3::BucketPolicy",
       "count": 1,
       "purpose": "S3 bucket policy"
+    },
+    {
+      "type": "Custom::CDKBucketDeployment",
+      "count": 1,
+      "purpose": "CloudFormation resource"
     }
   ],
   "resources": [
@@ -213,6 +228,7 @@
       "purpose": "CloudFront distribution",
       "settings": {
         "enabled": true,
+        "defaultRootObject": "index.html",
         "httpVersion": "http2",
         "originCount": 3,
         "cacheBehaviors": [
@@ -247,6 +263,40 @@
             "viewerProtocolPolicy": "redirect-to-https"
           }
         ]
+      }
+    },
+    {
+      "logicalId": "SpaRewriteFunction0C4DA631",
+      "type": "AWS::CloudFront::Function",
+      "purpose": "CloudFormation resource",
+      "settings": {
+        "AutoPublish": true,
+        "FunctionCode": "\nfunction handler(event) {\n  var request = event.request;\n  var uri = request.uri;\n\n  if (uri === \"/\") {\n    return request;\n  }\n\n  if (!uri.includes(\".\") && !uri.startsWith(\"/api/\") && !uri.startsWith(\"/ws/\")) {\n    request.uri = \"/index.html\";\n  }\n\n  return request;\n}\n",
+        "FunctionConfig": {
+          "Comment": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "HiramekiRelayStaaRewriteFunction1314E1A6"
+              ]
+            ]
+          },
+          "Runtime": "cloudfront-js-1.0"
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::Region"
+              },
+              "HiramekiRelayStaaRewriteFunction1314E1A6"
+            ]
+          ]
+        }
       }
     },
     {
@@ -373,6 +423,38 @@
       }
     },
     {
+      "logicalId": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+      "type": "AWS::IAM::Policy",
+      "purpose": "IAM inline policy",
+      "settings": {
+        "policyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+        "roles": [
+          "Ref:CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+        ],
+        "actions": [
+          "cloudfront:CreateInvalidation",
+          "cloudfront:GetInvalidation",
+          "s3:Abort*",
+          "s3:DeleteObject*",
+          "s3:GetBucket*",
+          "s3:GetObject*",
+          "s3:List*",
+          "s3:PutObject",
+          "s3:PutObjectLegalHold",
+          "s3:PutObjectRetention",
+          "s3:PutObjectTagging",
+          "s3:PutObjectVersionTagging"
+        ],
+        "resources": [
+          "*",
+          "GetAtt:SiteBucket397A1860.Arn",
+          "{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":s3:::\",{\"Fn::Sub\":\"cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}\"},\"/*\"]]}",
+          "{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":s3:::\",{\"Fn::Sub\":\"cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}\"}]]}",
+          "{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"SiteBucket397A1860\",\"Arn\"]},\"/*\"]]}"
+        ]
+      }
+    },
+    {
       "logicalId": "WsConnectFunctionServiceRoleDefaultPolicyC923FA46",
       "type": "AWS::IAM::Policy",
       "purpose": "IAM inline policy",
@@ -462,6 +544,30 @@
     },
     {
       "logicalId": "ApiFunctionServiceRole52B9747B",
+      "type": "AWS::IAM::Role",
+      "purpose": "IAM role",
+      "settings": {
+        "assumedBy": [
+          "Service:lambda.amazonaws.com"
+        ],
+        "managedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "logicalId": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
       "type": "AWS::IAM::Role",
       "purpose": "IAM role",
       "settings": {
@@ -581,6 +687,21 @@
       }
     },
     {
+      "logicalId": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+      "type": "AWS::Lambda::Function",
+      "purpose": "Lambda function",
+      "settings": {
+        "handler": "index.handler",
+        "runtime": "python3.13",
+        "timeoutSeconds": 900,
+        "environment": {
+          "Variables": {
+            "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
+          }
+        }
+      }
+    },
+    {
       "logicalId": "WsConnectFunction1B8FD7A0",
       "type": "AWS::Lambda::Function",
       "purpose": "Lambda function",
@@ -641,6 +762,20 @@
             }
           }
         }
+      }
+    },
+    {
+      "logicalId": "SiteDeploymentAwsCliLayerADBDEF4E",
+      "type": "AWS::Lambda::LayerVersion",
+      "purpose": "CloudFormation resource",
+      "settings": {
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "e2659170a0721541efa761a8d5d04d5e36cbbf691c4b15a9053002b7c825055d.zip"
+        },
+        "Description": "/opt/awscli/aws"
       }
     },
     {
@@ -724,6 +859,34 @@
           "GetAtt:SiteBucket397A1860.Arn",
           "{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"SiteBucket397A1860\",\"Arn\"]},\"/*\"]]}"
         ]
+      }
+    },
+    {
+      "logicalId": "SiteDeploymentCustomResource42D55606",
+      "type": "Custom::CDKBucketDeployment",
+      "purpose": "CloudFormation resource",
+      "settings": {
+        "ServiceToken": "<masked-or-reference>",
+        "SourceBucketNames": [
+          {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          }
+        ],
+        "SourceObjectKeys": [
+          "04a40f67deec277dbc81efbf5b83211d62c67b8ce0c605ada16e952f1928a9e5.zip"
+        ],
+        "DestinationBucketName": {
+          "Ref": "SiteBucket397A1860"
+        },
+        "WaitForDistributionInvalidation": true,
+        "Prune": true,
+        "DistributionId": {
+          "Ref": "Distribution830FAC52"
+        },
+        "DistributionPaths": [
+          "/*"
+        ],
+        "OutputObjectKeys": true
       }
     }
   ]

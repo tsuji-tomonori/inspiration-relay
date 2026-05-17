@@ -64,7 +64,7 @@ GitHub Actions are defined under `.github/workflows/`.
 
 - `ci.yml` runs on pull requests and manual dispatch. It installs dependencies, checks generated docs, runs typecheck / tests / build, and uploads a CDK synth artifact.
 - `generated-docs.yml` runs on `main` changes that affect API or infra docs. It regenerates docs and opens a pull request when generated files changed.
-- `deploy.yml` is a manual CD workflow for CDK deploy. It requires a GitHub Environment such as `dev`, OIDC permission, and `AWS_DEPLOY_ROLE_ARN` in environment secrets. The workflow builds all workspaces, optionally runs `cdk bootstrap`, synthesizes the stack, and runs `cdk deploy --require-approval never`.
+- `deploy.yml` is a manual CD workflow for CDK deploy. It requires a GitHub Environment such as `dev`, OIDC permission, and `AWS_DEPLOY_ROLE_ARN` in environment secrets. The workflow builds all workspaces, optionally runs `cdk bootstrap`, synthesizes the stack, and runs `cdk deploy --require-approval never`. The CDK stack deploys `apps/web/dist` to the private S3 site bucket and invalidates CloudFront after asset upload.
 
 The deploy workflow does not create AWS credentials by itself. Configure the target account role and environment approval rules before running it.
 
