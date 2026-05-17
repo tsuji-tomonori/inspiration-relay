@@ -108,6 +108,7 @@ export class GameService {
     startRound(state);
     touch(state);
     await this.repository.saveRoomState(state);
+    await this.notifyRoomUpdated(state.room.roomId, "game.started");
     return buildSnapshot(state, state.room.hostPlayerId);
   }
 
@@ -250,13 +251,13 @@ export function buildSnapshot(state: RoomState, viewerPlayerId?: string): RoomSn
   const round = state.round;
   const viewerRole = !viewer
     ? "unknown"
-    : viewer.isHost
-      ? "host"
-      : round?.answererPlayerId === viewer.playerId
+    : round?.answererPlayerId === viewer.playerId
         ? "answerer"
-        : round
-          ? "hinter"
-          : "spectator";
+        : viewer.isHost
+          ? "host"
+          : round
+            ? "hinter"
+            : "spectator";
   const sortedHints = round ? sortHintsForReveal(state.hints.filter((hint) => hint.roundNo === round.roundNo)) : [];
   const publicHints: PublicHint[] = sortedHints.map((hint, index) => ({
     playerId: hint.playerId,
