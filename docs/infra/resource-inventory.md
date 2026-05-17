@@ -11,16 +11,16 @@
 ## 全体サマリ
 
 - 対象スタック: `HiramekiRelayStack`
-- CloudFormation resources: 34
+- CloudFormation resources: 40
 
 | 領域 | 件数 |
 | --- | ---: |
 | Storage | 2 |
 | Data | 2 |
-| Compute | 8 |
+| Compute | 9 |
 | API | 12 |
 | Delivery | 2 |
-| Security/IAM | 8 |
+| Security/IAM | 10 |
 
 ## CloudFormation Type 別リソース数
 
@@ -31,14 +31,17 @@
 | `AWS::ApiGatewayV2::Route` | 4 | API Gateway v2 route |
 | `AWS::ApiGatewayV2::Stage` | 2 | API Gateway v2 stage |
 | `AWS::CloudFront::Distribution` | 1 | CloudFront distribution |
+| `AWS::CloudFront::Function` | 1 | CloudFormation resource |
 | `AWS::CloudFront::OriginAccessControl` | 1 | CloudFront origin access control |
 | `AWS::DynamoDB::Table` | 2 | DynamoDB table |
-| `AWS::IAM::Policy` | 4 | IAM inline policy |
-| `AWS::IAM::Role` | 4 | IAM role |
-| `AWS::Lambda::Function` | 4 | Lambda function |
+| `AWS::IAM::Policy` | 5 | IAM inline policy |
+| `AWS::IAM::Role` | 5 | IAM role |
+| `AWS::Lambda::Function` | 5 | Lambda function |
+| `AWS::Lambda::LayerVersion` | 1 | CloudFormation resource |
 | `AWS::Lambda::Permission` | 4 | Lambda invoke permission |
 | `AWS::S3::Bucket` | 1 | S3 bucket |
 | `AWS::S3::BucketPolicy` | 1 | S3 bucket policy |
+| `Custom::CDKBucketDeployment` | 1 | CloudFormation resource |
 
 ## リソース別主要設定
 
@@ -56,28 +59,34 @@
 | `WebSocketApidisconnectRouteC181A19C` | `AWS::ApiGatewayV2::Route` | API Gateway v2 route | `{"routeKey":"$disconnect","authorizationType":"NONE","target":"{\"Fn::Join\":[\"\",[\"integrations/\",{\"Ref\":\"WebSocketApidisconnectRouteDisconnectIntegration94C91381\"}]]}"}` |
 | `HttpApiDefaultStage3EEB07D6` | `AWS::ApiGatewayV2::Stage` | API Gateway v2 stage | `{"stageName":"$default","autoDeploy":true}` |
 | `WebSocketStageC46B7E43` | `AWS::ApiGatewayV2::Stage` | API Gateway v2 stage | `{"stageName":"v1","autoDeploy":true}` |
-| `Distribution830FAC52` | `AWS::CloudFront::Distribution` | CloudFront distribution | `{"enabled":true,"httpVersion":"http2","originCount":3,"cacheBehaviors":[{"pathPattern":"api/*","allowedMethods":["GET","HEAD","OPTIONS","PUT","PATCH","POST","DELETE"],"cachePolicyId":"4135ea2d-6df8-44a3-9df3-4b5a84be39ad","targetOriginId":"HiramekiRelayStackDistributionOrigin26420F728","viewerProtocolPolicy":"redirect-to-https"},{"pathPattern":"ws/*","allowedMethods":["GET","HEAD","OPTIONS","PUT","PATCH","POST","DELETE"],"cachePolicyId":"4135ea2d-6df8-44a3-9df3-4b5a84be39ad","targetOriginId":"HiramekiRelayStackDistributionOrigin3EE90E46F","viewerProtocolPolicy":"redirect-to-https"}]}` |
+| `Distribution830FAC52` | `AWS::CloudFront::Distribution` | CloudFront distribution | `{"enabled":true,"defaultRootObject":"index.html","httpVersion":"http2","originCount":3,"cacheBehaviors":[{"pathPattern":"api/*","allowedMethods":["GET","HEAD","OPTIONS","PUT","PATCH","POST","DELETE"],"cachePolicyId":"4135ea2d-6df8-44a3-9df3-4b5a84be39ad","targetOriginId":"HiramekiRelayStackDistributionOrigin26420F728","viewerProtocolPolicy":"redirect-to-https"},{"pathPattern":"ws/*","allowedMethods":["GET","HEAD","OPTIONS","PUT","PATCH","POST","DELETE"],"cachePolicyId":"4135ea2d-6df8-44a3-9df3-4b5a84be39ad","targetOriginId":"HiramekiRelayStackDistributionOrigin3EE90E46F","viewerProtocolPolicy":"redirect-to-https"}]}` |
+| `SpaRewriteFunction0C4DA631` | `AWS::CloudFront::Function` | CloudFormation resource | `{"AutoPublish":true,"FunctionCode":"\nfunction handler(event) {\n  var request = event.request;\n  var uri = request.uri;\n\n  if (uri === \"/\") {\n    return request;\n  }\n\n  if (!uri.includes(\".\") && !uri.startsWith(\"/api/\") && !uri.startsWith(\"/ws/\")) {\n    request.uri = \"/index.html\";\n  }\n\n  return request;\n}\n","FunctionConfig":{"Comment":{"Fn::Join":["",[{"Ref":"AWS::Region"},"HiramekiRelayStaaRewriteFunction1314E1A6"]]},"Runtime":"cloudfront-js-1.0"},"Name":{"Fn::Join":["",[{"Ref":"AWS::Region"},"HiramekiRelayStaaRewriteFunction1314E1A6"]]}}` |
 | `DistributionOrigin1S3OriginAccessControlEB606076` | `AWS::CloudFront::OriginAccessControl` | CloudFront origin access control | `{"name":"HiramekiRelayStackDistributiOrigin1S3OriginAccessControlC5372ED4","originType":"s3","signingBehavior":"always","signingProtocol":"sigv4"}` |
 | `ConnectionTable0C6E1E44` | `AWS::DynamoDB::Table` | DynamoDB table | `{"keySchema":[{"AttributeName":"connectionId","KeyType":"HASH"}],"attributeDefinitions":[{"AttributeName":"connectionId","AttributeType":"S"},{"AttributeName":"GSI1PK","AttributeType":"S"},{"AttributeName":"GSI1SK","AttributeType":"S"}],"billingMode":"PAY_PER_REQUEST","timeToLive":{"AttributeName":"ttl","Enabled":true},"globalSecondaryIndexes":[{"IndexName":"ByRoom","KeySchema":[{"AttributeName":"GSI1PK","KeyType":"HASH"},{"AttributeName":"GSI1SK","KeyType":"RANGE"}],"Projection":{"ProjectionType":"ALL"}}]}` |
 | `GameTable0C79FC62` | `AWS::DynamoDB::Table` | DynamoDB table | `{"keySchema":[{"AttributeName":"PK","KeyType":"HASH"},{"AttributeName":"SK","KeyType":"RANGE"}],"attributeDefinitions":[{"AttributeName":"PK","AttributeType":"S"},{"AttributeName":"SK","AttributeType":"S"}],"billingMode":"PAY_PER_REQUEST","timeToLive":{"AttributeName":"ttl","Enabled":true}}` |
 | `ApiFunctionServiceRoleDefaultPolicy20A32B8D` | `AWS::IAM::Policy` | IAM inline policy | `{"policyName":"ApiFunctionServiceRoleDefaultPolicy20A32B8D","roles":["Ref:ApiFunctionServiceRole52B9747B"],"actions":["dynamodb:BatchGetItem","dynamodb:BatchWriteItem","dynamodb:ConditionCheckItem","dynamodb:DeleteItem","dynamodb:DescribeTable","dynamodb:GetItem","dynamodb:GetRecords","dynamodb:GetShardIterator","dynamodb:PutItem","dynamodb:Query","dynamodb:Scan","dynamodb:UpdateItem"],"resources":["GetAtt:ConnectionTable0C6E1E44.Arn","GetAtt:GameTable0C79FC62.Arn","{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"ConnectionTable0C6E1E44\",\"Arn\"]},\"/index/*\"]]}"]}` |
+| `CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF` | `AWS::IAM::Policy` | IAM inline policy | `{"policyName":"CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF","roles":["Ref:CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"],"actions":["cloudfront:CreateInvalidation","cloudfront:GetInvalidation","s3:Abort*","s3:DeleteObject*","s3:GetBucket*","s3:GetObject*","s3:List*","s3:PutObject","s3:PutObjectLegalHold","s3:PutObjectRetention","s3:PutObjectTagging","s3:PutObjectVersionTagging"],"resources":["*","GetAtt:SiteBucket397A1860.Arn","{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":s3:::\",{\"Fn::Sub\":\"cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}\"},\"/*\"]]}","{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":s3:::\",{\"Fn::Sub\":\"cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}\"}]]}","{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"SiteBucket397A1860\",\"Arn\"]},\"/*\"]]}"]}` |
 | `WsConnectFunctionServiceRoleDefaultPolicyC923FA46` | `AWS::IAM::Policy` | IAM inline policy | `{"policyName":"WsConnectFunctionServiceRoleDefaultPolicyC923FA46","roles":["Ref:WsConnectFunctionServiceRoleCE3E3163"],"actions":["dynamodb:BatchGetItem","dynamodb:BatchWriteItem","dynamodb:ConditionCheckItem","dynamodb:DeleteItem","dynamodb:DescribeTable","dynamodb:GetItem","dynamodb:GetRecords","dynamodb:GetShardIterator","dynamodb:PutItem","dynamodb:Query","dynamodb:Scan","dynamodb:UpdateItem"],"resources":["GetAtt:ConnectionTable0C6E1E44.Arn","{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"ConnectionTable0C6E1E44\",\"Arn\"]},\"/index/*\"]]}"]}` |
 | `WsDisconnectFunctionServiceRoleDefaultPolicyC0F5D4B5` | `AWS::IAM::Policy` | IAM inline policy | `{"policyName":"WsDisconnectFunctionServiceRoleDefaultPolicyC0F5D4B5","roles":["Ref:WsDisconnectFunctionServiceRoleEBDDAD2B"],"actions":["dynamodb:BatchGetItem","dynamodb:BatchWriteItem","dynamodb:ConditionCheckItem","dynamodb:DeleteItem","dynamodb:DescribeTable","dynamodb:GetItem","dynamodb:GetRecords","dynamodb:GetShardIterator","dynamodb:PutItem","dynamodb:Query","dynamodb:Scan","dynamodb:UpdateItem"],"resources":["GetAtt:ConnectionTable0C6E1E44.Arn","{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"ConnectionTable0C6E1E44\",\"Arn\"]},\"/index/*\"]]}"]}` |
 | `WsMessageFunctionServiceRoleDefaultPolicyA2E774AC` | `AWS::IAM::Policy` | IAM inline policy | `{"policyName":"WsMessageFunctionServiceRoleDefaultPolicyA2E774AC","roles":["Ref:WsMessageFunctionServiceRole042576DF"],"actions":["dynamodb:BatchGetItem","dynamodb:BatchWriteItem","dynamodb:ConditionCheckItem","dynamodb:DeleteItem","dynamodb:DescribeTable","dynamodb:GetItem","dynamodb:GetRecords","dynamodb:GetShardIterator","dynamodb:PutItem","dynamodb:Query","dynamodb:Scan","dynamodb:UpdateItem"],"resources":["GetAtt:ConnectionTable0C6E1E44.Arn","GetAtt:GameTable0C79FC62.Arn","{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"ConnectionTable0C6E1E44\",\"Arn\"]},\"/index/*\"]]}"]}` |
 | `ApiFunctionServiceRole52B9747B` | `AWS::IAM::Role` | IAM role | `{"assumedBy":["Service:lambda.amazonaws.com"],"managedPolicyArns":[{"Fn::Join":["",["arn:",{"Ref":"AWS::Partition"},":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]]}]}` |
+| `CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265` | `AWS::IAM::Role` | IAM role | `{"assumedBy":["Service:lambda.amazonaws.com"],"managedPolicyArns":[{"Fn::Join":["",["arn:",{"Ref":"AWS::Partition"},":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]]}]}` |
 | `WsConnectFunctionServiceRoleCE3E3163` | `AWS::IAM::Role` | IAM role | `{"assumedBy":["Service:lambda.amazonaws.com"],"managedPolicyArns":[{"Fn::Join":["",["arn:",{"Ref":"AWS::Partition"},":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]]}]}` |
 | `WsDisconnectFunctionServiceRoleEBDDAD2B` | `AWS::IAM::Role` | IAM role | `{"assumedBy":["Service:lambda.amazonaws.com"],"managedPolicyArns":[{"Fn::Join":["",["arn:",{"Ref":"AWS::Partition"},":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]]}]}` |
 | `WsMessageFunctionServiceRole042576DF` | `AWS::IAM::Role` | IAM role | `{"assumedBy":["Service:lambda.amazonaws.com"],"managedPolicyArns":[{"Fn::Join":["",["arn:",{"Ref":"AWS::Partition"},":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]]}]}` |
 | `ApiFunctionCE271BD4` | `AWS::Lambda::Function` | Lambda function | `{"handler":"handler","runtime":"nodejs22.x","architectures":["arm64"],"memorySize":256,"timeoutSeconds":10,"environment":{"Variables":{"GAME_TABLE_NAME":{"Ref":"GameTable0C79FC62"},"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
+| `CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536` | `AWS::Lambda::Function` | Lambda function | `{"handler":"index.handler","runtime":"python3.13","timeoutSeconds":900,"environment":{"Variables":{"AWS_CA_BUNDLE":"/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"}}}` |
 | `WsConnectFunction1B8FD7A0` | `AWS::Lambda::Function` | Lambda function | `{"handler":"ws-handler.connectHandler","runtime":"nodejs22.x","architectures":["arm64"],"timeoutSeconds":5,"environment":{"Variables":{"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
 | `WsDisconnectFunction340F3D71` | `AWS::Lambda::Function` | Lambda function | `{"handler":"ws-handler.disconnectHandler","runtime":"nodejs22.x","architectures":["arm64"],"timeoutSeconds":5,"environment":{"Variables":{"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
 | `WsMessageFunction3772EA9D` | `AWS::Lambda::Function` | Lambda function | `{"handler":"ws-handler.messageHandler","runtime":"nodejs22.x","architectures":["arm64"],"timeoutSeconds":10,"environment":{"Variables":{"GAME_TABLE_NAME":{"Ref":"GameTable0C79FC62"},"CONNECTION_TABLE_NAME":{"Ref":"ConnectionTable0C6E1E44"}}}}` |
+| `SiteDeploymentAwsCliLayerADBDEF4E` | `AWS::Lambda::LayerVersion` | CloudFormation resource | `{"Content":{"S3Bucket":{"Fn::Sub":"cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"},"S3Key":"e2659170a0721541efa761a8d5d04d5e36cbbf691c4b15a9053002b7c825055d.zip"},"Description":"/opt/awscli/aws"}` |
 | `HttpApiANYapiproxyApiIntegrationPermission37A64BBC` | `AWS::Lambda::Permission` | Lambda invoke permission | `{"action":"lambda:InvokeFunction","principal":"apigateway.amazonaws.com","functionName":"GetAtt:ApiFunctionCE271BD4.Arn","sourceArn":"{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"HttpApiF5A9A8A7\"},\"/*/*/api/{proxy+}\"]]}"}` |
 | `WebSocketApiconnectRouteConnectIntegrationPermission39398969` | `AWS::Lambda::Permission` | Lambda invoke permission | `{"action":"lambda:InvokeFunction","principal":"apigateway.amazonaws.com","functionName":"GetAtt:WsConnectFunction1B8FD7A0.Arn","sourceArn":"{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"WebSocketApi34BCF99B\"},\"/*$connect\"]]}"}` |
 | `WebSocketApidefaultRouteDefaultIntegrationPermission0418F15D` | `AWS::Lambda::Permission` | Lambda invoke permission | `{"action":"lambda:InvokeFunction","principal":"apigateway.amazonaws.com","functionName":"GetAtt:WsMessageFunction3772EA9D.Arn","sourceArn":"{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"WebSocketApi34BCF99B\"},\"/*$default\"]]}"}` |
 | `WebSocketApidisconnectRouteDisconnectIntegrationPermissionAE705904` | `AWS::Lambda::Permission` | Lambda invoke permission | `{"action":"lambda:InvokeFunction","principal":"apigateway.amazonaws.com","functionName":"GetAtt:WsDisconnectFunction340F3D71.Arn","sourceArn":"{\"Fn::Join\":[\"\",[\"arn:\",{\"Ref\":\"AWS::Partition\"},\":execute-api:\",{\"Ref\":\"AWS::Region\"},\":\",{\"Ref\":\"AWS::AccountId\"},\":\",{\"Ref\":\"WebSocketApi34BCF99B\"},\"/*$disconnect\"]]}"}` |
 | `SiteBucket397A1860` | `AWS::S3::Bucket` | S3 bucket | `{"encryption":{"ServerSideEncryptionConfiguration":[{"ServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]},"publicAccessBlock":{"BlockPublicAcls":true,"BlockPublicPolicy":true,"IgnorePublicAcls":true,"RestrictPublicBuckets":true}}` |
 | `SiteBucketPolicy3AC1D0F8` | `AWS::S3::BucketPolicy` | S3 bucket policy | `{"bucket":"Ref:SiteBucket397A1860","statementCount":2,"actions":["s3:*","s3:GetObject"],"resources":["GetAtt:SiteBucket397A1860.Arn","{\"Fn::Join\":[\"\",[{\"Fn::GetAtt\":[\"SiteBucket397A1860\",\"Arn\"]},\"/*\"]]}"]}` |
+| `SiteDeploymentCustomResource42D55606` | `Custom::CDKBucketDeployment` | CloudFormation resource | `{"ServiceToken":"<masked-or-reference>","SourceBucketNames":[{"Fn::Sub":"cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"}],"SourceObjectKeys":["04a40f67deec277dbc81efbf5b83211d62c67b8ce0c605ada16e952f1928a9e5.zip"],"DestinationBucketName":{"Ref":"SiteBucket397A1860"},"WaitForDistributionInvalidation":true,"Prune":true,"DistributionId":{"Ref":"Distribution830FAC52"},"DistributionPaths":["/*"],"OutputObjectKeys":true}` |
 
 ## 注意事項
 

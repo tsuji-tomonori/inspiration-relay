@@ -1,11 +1,21 @@
-import { Duration, Fn, RemovalPolicy, Stack, type StackProps } from "aws-cdk-lib";
+import { CfnOutput, Duration, Fn, RemovalPolicy, Stack, type StackProps } from "aws-cdk-lib";
 import { HttpApi, HttpMethod, WebSocketApi, WebSocketStage } from "aws-cdk-lib/aws-apigatewayv2";
 import { HttpLambdaIntegration, WebSocketLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
-import { AllowedMethods, CachePolicy, Distribution, OriginProtocolPolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront";
+import {
+  AllowedMethods,
+  CachePolicy,
+  Distribution,
+  Function as CloudFrontFunction,
+  FunctionCode,
+  FunctionEventType,
+  OriginProtocolPolicy,
+  ViewerProtocolPolicy
+} from "aws-cdk-lib/aws-cloudfront";
 import { HttpOrigin, S3BucketOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Architecture, Code, Function as LambdaFunction, Runtime } from "aws-cdk-lib/aws-lambda";
 import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3";
+import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 
 export class HiramekiRelayStack extends Stack {
@@ -126,9 +136,35 @@ export class HiramekiRelayStack extends Stack {
     const httpDomain = Fn.select(2, Fn.split("/", httpApi.apiEndpoint));
     const wsDomain = Fn.select(2, Fn.split("/", websocketStage.url));
 
-    new Distribution(this, "Distribution", {
+    const spaRewriteFunction = new CloudFrontFunction(this, "SpaRewriteFunction", {
+      code: FunctionCode.fromInline(`
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+
+  if (uri === "/") {
+    return request;
+  }
+
+  if (!uri.includes(".") && !uri.startsWith("/api/") && !uri.startsWith("/ws/")) {
+    request.uri = "/index.html";
+  }
+
+  return request;
+}
+`)
+    });
+
+    const distribution = new Distribution(this, "Distribution", {
+      defaultRootObject: "index.html",
       defaultBehavior: {
         origin: S3BucketOrigin.withOriginAccessControl(siteBucket),
+        functionAssociations: [
+          {
+            function: spaRewriteFunction,
+            eventType: FunctionEventType.VIEWER_REQUEST
+          }
+        ],
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS
       },
       additionalBehaviors: {
@@ -150,6 +186,25 @@ export class HiramekiRelayStack extends Stack {
           viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS
         }
       }
+    });
+
+    new BucketDeployment(this, "SiteDeployment", {
+      sources: [Source.asset("../apps/web/dist")],
+      destinationBucket: siteBucket,
+      distribution,
+      distributionPaths: ["/*"]
+    });
+
+    new CfnOutput(this, "SiteBucketName", {
+      value: siteBucket.bucketName
+    });
+
+    new CfnOutput(this, "DistributionId", {
+      value: distribution.distributionId
+    });
+
+    new CfnOutput(this, "DistributionDomainName", {
+      value: distribution.distributionDomainName
     });
   }
 }
