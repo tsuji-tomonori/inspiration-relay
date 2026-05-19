@@ -1,6 +1,6 @@
 # 仕様準拠テスト追加
 
-状態: in_progress
+状態: done
 
 ## 背景
 
@@ -64,3 +64,14 @@
 
 - 提供 ZIP のテストが現行コードの exported API とずれている場合、テストの調整が必要になる。
 - infra の CDK 合成テンプレートは construct ID や生成リソース名に依存しやすいため、仕様意図を保った assertion へ調整が必要になる可能性がある。
+
+## 完了結果
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/12
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/12#issuecomment-4487948543
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/12#issuecomment-4487948551
+- 検証:
+  - `npm run test -w @hirameki-relay/api`: pass
+  - `npm run test -w @hirameki-relay/web`: pass
+  - `npm run test -w @hirameki-relay/infra`: pass
+  - `git diff --check`: pass
