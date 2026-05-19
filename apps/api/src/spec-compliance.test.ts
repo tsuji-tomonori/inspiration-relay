@@ -58,6 +58,8 @@ describe("spec compliance: game service", () => {
 
     await expect(service.submitHint(host.roomId, 1, player2.playerToken, "あ"))
       .rejects.toMatchObject({ code: "INVALID_HINT" });
+    await expect(service.submitHint(host.roomId, 1, player2.playerToken, "フワフワ"))
+      .rejects.toMatchObject({ code: "INVALID_HINT" });
     await expect(service.submitHint(host.roomId, 1, player2.playerToken, "パンケーキ"))
       .rejects.toMatchObject({ code: "INVALID_HINT" });
     await expect(service.submitHint(host.roomId, 1, host.playerToken, "あまい"))
