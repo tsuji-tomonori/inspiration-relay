@@ -54,11 +54,11 @@
 
 ## 受け入れ条件
 
-- [ ] `startGame()` が永続化後に `game.started` を broadcast することを検出できる unit test が追加されている。
-- [ ] 2ラウンド目で非ホスト回答者にも `topicDisplay` / `answerKana` / `aliases` が秘匿される unit test が追加されている。
-- [ ] 同じ 2ラウンド目でホストが `hinter` として `topicDisplay` を見られ、答え情報は見られないことを検証している。
-- [ ] API test / typecheck / diff check が pass している、または未実施理由が記録されている。
-- [ ] PR に日本語でレビュー対応結果をコメントしている。
+- [x] `startGame()` が永続化後に `game.started` を broadcast することを検出できる unit test が追加されている。
+- [x] 2ラウンド目で非ホスト回答者にも `topicDisplay` / `answerKana` / `aliases` が秘匿される unit test が追加されている。
+- [x] 同じ 2ラウンド目でホストが `hinter` として `topicDisplay` を見られ、答え情報は見られないことを検証している。
+- [x] API test / typecheck / diff check が pass している、または未実施理由が記録されている。
+- [x] PR に日本語でレビュー対応結果をコメントしている。
 
 ## 検証計画
 
@@ -76,6 +76,26 @@
 
 - topic 選択や回答文字列に依存したテストが brittle になる可能性があるため、既存 topic に合わせて最小の進行操作で検証する。
 
+## 実施結果
+
+- `apps/api/src/service.test.ts` に `CloneOnReadRoomRepository` と `OrderedBroadcaster` を追加した。
+- `永続化後にgame.startedをbroadcastする` テストで `saveRoomState` -> `broadcastRoomUpdate` の順序と broadcast 時点の保存済み状態を検証した。
+- `2ラウンド目で非ホストが回答者になってもtopicDisplayと答え情報を秘匿する` テストで、非ホスト回答者秘匿とホスト hinter 表示を検証した。
+- suggestion の `ApiGatewayRoomEventBroadcaster` payload test は今回未対応とし、PR コメントと作業レポートに理由を記録した。
+- 作業レポート: `reports/working/20260519-2315-address-pr9-review.md`
+
+## 検証結果
+
+- `git diff --check`: pass
+- `npm run test -w @hirameki-relay/api`: fail -> 修正後 pass
+- `npm run typecheck -w @hirameki-relay/api`: pass
+
+## PR コメント
+
+- レビュー指摘対応結果: https://github.com/tsuji-tomonori/inspiration-relay/pull/9#issuecomment-4488655109
+- セルフレビュー: https://github.com/tsuji-tomonori/inspiration-relay/pull/9#issuecomment-4488658161
+- GitHub Apps コメント投稿は 403 のため、`gh pr comment` にフォールバックした。
+
 ## 状態
 
-in_progress
+done
