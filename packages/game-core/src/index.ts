@@ -20,7 +20,7 @@ export function validateNickname(nickname: string): ValidationResult {
 }
 
 export function validateHint(hint: string, topic: Pick<Topic, "answerKana" | "aliases">, existingHints: Pick<Hint, "hint">[]): ValidationResult {
-  const normalizedHint = normalizeAnswer(hint);
+  const normalizedHint = normalizeHintInput(hint);
   if (!hiraganaHintPattern.test(normalizedHint)) {
     return { ok: false, code: "INVALID_HINT", message: "ヒントはひらがなと長音だけで2〜10文字にしてください" };
   }
@@ -32,6 +32,10 @@ export function validateHint(hint: string, topic: Pick<Topic, "answerKana" | "al
     return { ok: false, code: "DUPLICATE_HINT", message: "同じヒントがすでに投稿されています" };
   }
   return { ok: true };
+}
+
+function normalizeHintInput(input: string): string {
+  return input.trim().normalize("NFKC");
 }
 
 export function normalizeAnswer(input: string): string {
