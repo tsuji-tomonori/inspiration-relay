@@ -56,11 +56,11 @@
 
 ## 受け入れ条件
 
-- [ ] PR #9 ブランチに `origin/main` が取り込まれている。
-- [ ] merge conflict が残っていない。
-- [ ] PR #9 の `startGame()` 同期テストと game.started broadcast 修正が保持されている。
-- [ ] 変更範囲に見合う API 検証が pass している、または未実施理由が明記されている。
-- [ ] PR に日本語で受け入れ条件確認とセルフレビューをコメントしている。
+- [x] PR #9 ブランチに `origin/main` が取り込まれている。
+- [x] merge conflict が残っていない。
+- [x] PR #9 の `startGame()` 同期テストと game.started broadcast 修正が保持されている。
+- [x] 変更範囲に見合う API 検証が pass している、または未実施理由が明記されている。
+- [x] PR に日本語で受け入れ条件確認とセルフレビューをコメントしている。
 
 ## 検証計画
 
@@ -79,6 +79,27 @@
 - main 側の後続 PR が同じテスト名や helper を追加している場合、重複や期待値のズレが発生する可能性がある。
 - CI は GitHub 側の設定や実行状況に依存するため、ローカル検証との差異が残る可能性がある。
 
+## 実施結果
+
+- `origin/main` を merge commit `cd44610` で取り込んだ。
+- 競合ファイルは `apps/api/src/realtime.ts` と `apps/api/src/service.ts` の 2 件だった。
+- `realtime.ts` は main 側の拡張済み `RoomUpdateReason` を採用した。
+- `service.ts` は回答者優先の `viewerRole` と main 側の permission 計算を両立した。
+- 作業レポート: `reports/working/20260519-2246-resolve-pr9-conflicts.md`
+
+## 検証結果
+
+- `git diff --check`: pass
+- `git diff --cached --check`: pass
+- `npm run test -w @hirameki-relay/api`: pass
+- `npm run typecheck -w @hirameki-relay/api`: pass
+
+## PR コメント
+
+- 受け入れ条件確認: https://github.com/tsuji-tomonori/inspiration-relay/pull/9#issuecomment-4488483859
+- セルフレビュー: https://github.com/tsuji-tomonori/inspiration-relay/pull/9#issuecomment-4488486641
+- GitHub Apps コメント投稿は 403 のため、`gh pr comment` にフォールバックした。
+
 ## 状態
 
-in_progress
+done
