@@ -1,6 +1,6 @@
 # 存在しない skill 参照による blocked リスク修正
 
-状態: in_progress
+状態: done
 
 タスク種別: 修正
 
@@ -53,11 +53,19 @@ PR #13 merge 後、`AGENTS.md` や追加 skill が存在しない `skills/*/SKIL
 
 ## 受け入れ条件
 
-- [ ] `AGENTS.md` が、存在しない repo-local `SKILL.md` を理由に通常作業を blocked にしない方針を明記している。
-- [ ] PR #13 で追加される `skills/worktree-task-pr-flow/SKILL.md` が、参照先 skill 不在時の続行方針を明記している。
-- [ ] PR #13 で追加される `skills/github-apps-pr-operator/SKILL.md` が、参照先 skill 不在時の続行方針を明記している。
-- [ ] 変更範囲に対する `git diff --check` と `pre-commit run --files ...` が通っている。
-- [ ] PR に blocking 指摘への対応結果をコメントしている。
+- [x] `AGENTS.md` が、存在しない repo-local `SKILL.md` を理由に通常作業を blocked にしない方針を明記している。
+- [x] PR #13 で追加される `skills/worktree-task-pr-flow/SKILL.md` が、参照先 skill 不在時の続行方針を明記している。
+- [x] PR #13 で追加される `skills/github-apps-pr-operator/SKILL.md` が、参照先 skill 不在時の続行方針を明記している。
+- [x] 変更範囲に対する `git diff --check` と `pre-commit run --files ...` が通っている。
+- [x] PR に blocking 指摘への対応結果をコメントしている。
+
+## 完了メモ
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/13
+- blocking 指摘 1 対応コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488663683
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488666894
+- `AGENTS.md`、`skills/worktree-task-pr-flow/SKILL.md`、`skills/github-apps-pr-operator/SKILL.md` に missing repo-local skill の fallback 方針を追加した。
+- GitHub Apps connector は同 PR で `403 Resource not accessible by integration` を確認済みのため、PR コメント投稿は `gh pr comment` にフォールバックした。
 
 ## 検証計画
 

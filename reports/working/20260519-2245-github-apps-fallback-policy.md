@@ -48,7 +48,7 @@
 | `tasks/done/20260519-2242-github-apps-fallback-policy.md` | Markdown | task md / 受け入れ条件 / RCA / 完了メモ | R5 |
 | `reports/working/20260519-2245-github-apps-fallback-policy.md` | Markdown | 作業完了レポート | R5 |
 | PR #13 | Pull Request | 変更内容、検証、制約、fallback 理由 | R1, R2, R3 |
-| `tasks/do/20260519-2314-skill-reference-availability.md` | Markdown | blocking 指摘対応 task md | 追加指摘対応 |
+| `tasks/done/20260519-2314-skill-reference-availability.md` | Markdown | blocking 指摘対応 task md / 完了メモ | 追加指摘対応 |
 
 ## 6. 指示へのfit評価
 
@@ -82,6 +82,8 @@
 - PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/13
 - 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488484243
 - セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488486395
+- blocking 指摘 1 対応コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488663683
+- blocking 指摘 1 対応後セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488666894
 - PR 作成: GitHub Apps connector に PR 作成ツールが見つからなかったため、`gh pr create` にフォールバック。
 - PR コメント投稿: GitHub Apps connector が `403 Resource not accessible by integration` で失敗したため、`gh pr comment` にフォールバック。
 
