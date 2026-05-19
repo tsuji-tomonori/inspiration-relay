@@ -82,6 +82,7 @@ PR #12 のレビューで、仕様準拠テストとして「お題と一致し�
 ## 完了結果
 
 - PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/12
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/12#issuecomment-4488151621
 - レビュー指摘対応コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/12#issuecomment-4488140460
 - 更新後セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/12#issuecomment-4488140500
 - 検証:
