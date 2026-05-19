@@ -32,8 +32,9 @@ Version: `0.1.0`
 | `JoinRoomRequest` | `object` | nickname, avatarId |
 | `Player` | `object` | playerId, nickname, avatarId, score, correctCount, assistCount, isHost, joinedAt, lastSeenAt |
 | `PublicHint` | `object` | playerId, hint, length, revealed |
+| `RoomPermissions` | `object` | canStartGame, canGoNextRound, canSubmitAnswer, canSubmitHint |
 | `RoomSettings` | `object` | maxPlayers, hintSeconds, answerSeconds, roundMode |
-| `RoomSnapshot` | `object` | roomId, status, hostPlayerId, settings, currentRoundNo, players, round, hints, submittedHintPlayerIds, viewerRole |
+| `RoomSnapshot` | `object` | roomId, status, hostPlayerId, settings, currentRoundNo, players, round, hints, submittedHintPlayerIds, viewerRole, permissions |
 | `Round` | `object` | roundNo, status, answererPlayerId, topicId, deadlineAt, revealedHintCount, winningHintPlayerId, result |
 | `SessionResponse` | `object` | roomId, playerId, playerToken, snapshot |
 | `SubmitAnswerRequest` | `object` | answer |

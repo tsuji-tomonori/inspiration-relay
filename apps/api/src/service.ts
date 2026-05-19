@@ -147,8 +147,10 @@ export class GameService {
       round.revealedHintCount = Math.min(1, expectedHints);
       round.deadlineAt = futureIso(state.room.settings.answerSeconds);
     }
+    const reason: RoomUpdateReason = round.status === "ANSWERING" ? "answering.started" : "hint.submitted";
     touch(state);
     await this.repository.saveRoomState(state);
+    await this.notifyRoomUpdated(state.room.roomId, reason);
     return buildSnapshot(state, player.playerId);
   }
 
@@ -161,6 +163,7 @@ export class GameService {
     }
 
     const sortedHints = sortHintsForReveal(state.hints.filter((hint) => hint.roundNo === roundNo));
+    let reason: RoomUpdateReason;
     if (isCorrectAnswer(answer, currentTopic(round))) {
       const winningHint = sortedHints[Math.max(0, round.revealedHintCount - 1)] ?? null;
       round.status = "ROUND_RESULT";
@@ -170,16 +173,20 @@ export class GameService {
         const original = state.players.find((candidate) => candidate.playerId === scored.playerId);
         return { ...original, ...scored } as StoredPlayer;
       });
+      reason = "round.result";
     } else if (round.revealedHintCount < sortedHints.length) {
       round.revealedHintCount += 1;
       round.deadlineAt = futureIso(state.room.settings.answerSeconds);
+      reason = "hint.revealed";
     } else {
       round.status = "ROUND_RESULT";
       round.result = "INCORRECT";
+      reason = "round.result";
     }
 
     touch(state);
     await this.repository.saveRoomState(state);
+    await this.notifyRoomUpdated(state.room.roomId, reason);
     return buildSnapshot(state, player.playerId);
   }
 
@@ -192,6 +199,7 @@ export class GameService {
     }
 
     const sortedHints = sortHintsForReveal(state.hints.filter((hint) => hint.roundNo === roundNo));
+    const reason: RoomUpdateReason = round.revealedHintCount < sortedHints.length ? "hint.revealed" : "round.result";
     if (round.revealedHintCount < sortedHints.length) {
       round.revealedHintCount += 1;
       round.deadlineAt = futureIso(state.room.settings.answerSeconds);
@@ -202,6 +210,7 @@ export class GameService {
 
     touch(state);
     await this.repository.saveRoomState(state);
+    await this.notifyRoomUpdated(state.room.roomId, reason);
     return buildSnapshot(state, player.playerId);
   }
 
@@ -215,12 +224,14 @@ export class GameService {
       state.room.status = "GAME_RESULT";
       touch(state);
       await this.repository.saveRoomState(state);
+      await this.notifyRoomUpdated(state.room.roomId, "game.result");
       return buildSnapshot(state, state.room.hostPlayerId);
     }
 
     startRound(state);
     touch(state);
     await this.repository.saveRoomState(state);
+    await this.notifyRoomUpdated(state.room.roomId, "round.started");
     return buildSnapshot(state, state.room.hostPlayerId);
   }
 
@@ -249,15 +260,10 @@ export class GameService {
 export function buildSnapshot(state: RoomState, viewerPlayerId?: string): RoomSnapshot {
   const viewer = viewerPlayerId ? state.players.find((player) => player.playerId === viewerPlayerId) : null;
   const round = state.round;
-  const viewerRole = !viewer
-    ? "unknown"
-    : round?.answererPlayerId === viewer.playerId
-        ? "answerer"
-        : viewer.isHost
-          ? "host"
-          : round
-            ? "hinter"
-            : "spectator";
+  const isHost = viewer?.isHost === true;
+  const isAnswerer = Boolean(viewer && round?.answererPlayerId === viewer.playerId);
+  const hasSubmittedHint = Boolean(viewer && round && state.hints.some((hint) => hint.roundNo === round.roundNo && hint.playerId === viewer.playerId));
+  const viewerRole = !viewer ? "unknown" : isAnswerer ? "answerer" : round ? "hinter" : "spectator";
   const sortedHints = round ? sortHintsForReveal(state.hints.filter((hint) => hint.roundNo === round.roundNo)) : [];
   const publicHints: PublicHint[] = sortedHints.map((hint, index) => ({
     playerId: hint.playerId,
@@ -284,7 +290,13 @@ export function buildSnapshot(state: RoomState, viewerPlayerId?: string): RoomSn
     hints: publicHints,
     submittedHintPlayerIds: sortedHints.map((hint) => hint.playerId),
     viewerPlayerId,
-    viewerRole
+    viewerRole,
+    permissions: {
+      canStartGame: isHost && state.room.status === "LOBBY" && state.players.length >= 3,
+      canGoNextRound: isHost && round?.status === "ROUND_RESULT",
+      canSubmitAnswer: isAnswerer && round?.status === "ANSWERING",
+      canSubmitHint: Boolean(viewer && round?.status === "HINT_SUBMITTING" && !isAnswerer && !hasSubmittedHint)
+    }
   };
 }
 

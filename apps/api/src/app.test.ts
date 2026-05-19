@@ -56,6 +56,72 @@ describe("api", () => {
     ]);
   });
 
+  it("notifies the room after game state changes", async () => {
+    const broadcaster = new RecordingBroadcaster();
+    const repository = new MemoryRoomRepository();
+    const service = new GameService(repository, new MemoryRealtimeRepository(), broadcaster);
+    const created = await service.createRoom({ nickname: "さくら", avatarId: "rabbit" });
+    const joined1 = await service.joinRoom(created.roomId, { nickname: "ぺんたろう", avatarId: "penguin" });
+    const joined2 = await service.joinRoom(created.roomId, { nickname: "ひよこ", avatarId: "chick" });
+
+    await service.startGame(created.roomId, created.hostToken ?? "");
+    await service.submitHint(created.roomId, 1, joined1.playerToken, "あまい");
+    await service.submitHint(created.roomId, 1, joined2.playerToken, "まるい");
+    await service.submitAnswer(created.roomId, 1, created.playerToken, "ちがう");
+    await service.submitAnswer(created.roomId, 1, created.playerToken, "ぱんけーき");
+    await service.nextRound(created.roomId, created.hostToken ?? "");
+
+    const state = await repository.getRoomState(created.roomId);
+    expect(state?.round).toBeTruthy();
+    if (state?.round) {
+      state.room.currentRoundNo = state.players.length;
+      state.round.status = "ROUND_RESULT";
+      await repository.saveRoomState(state);
+    }
+    await service.nextRound(created.roomId, created.hostToken ?? "");
+
+    expect(broadcaster.events.map((event) => event.reason)).toEqual([
+      "player.joined",
+      "player.joined",
+      "game.started",
+      "hint.submitted",
+      "answering.started",
+      "hint.revealed",
+      "round.result",
+      "round.started",
+      "game.result"
+    ]);
+  });
+
+  it("separates host permissions from answerer and hinter roles", async () => {
+    const service = new GameService(new MemoryRoomRepository(), new MemoryRealtimeRepository(), new RecordingBroadcaster());
+    const created = await service.createRoom({ nickname: "さくら", avatarId: "rabbit" });
+    const joined1 = await service.joinRoom(created.roomId, { nickname: "ぺんたろう", avatarId: "penguin" });
+    const joined2 = await service.joinRoom(created.roomId, { nickname: "ひよこ", avatarId: "chick" });
+
+    const hostSnapshot = await service.startGame(created.roomId, created.hostToken ?? "");
+    expect(hostSnapshot.viewerRole).toBe("answerer");
+    expect(hostSnapshot.round?.topicDisplay).toBeUndefined();
+    expect(hostSnapshot.permissions.canSubmitAnswer).toBe(false);
+    expect(hostSnapshot.permissions.canSubmitHint).toBe(false);
+
+    const joinedSnapshot = await service.snapshot(created.roomId, joined1.playerToken);
+    expect(joinedSnapshot.viewerRole).toBe("hinter");
+    expect(joinedSnapshot.round?.topicDisplay).toBe("パンケーキ");
+    expect(joinedSnapshot.permissions.canSubmitHint).toBe(true);
+    expect(joinedSnapshot.permissions.canSubmitAnswer).toBe(false);
+
+    await service.submitHint(created.roomId, 1, joined1.playerToken, "あまい");
+    const submittedSnapshot = await service.snapshot(created.roomId, joined1.playerToken);
+    expect(submittedSnapshot.permissions.canSubmitHint).toBe(false);
+
+    await service.submitHint(created.roomId, 1, joined2.playerToken, "まるい");
+    const answeringHostSnapshot = await service.snapshot(created.roomId, created.playerToken);
+    expect(answeringHostSnapshot.viewerRole).toBe("answerer");
+    expect(answeringHostSnapshot.round?.topicDisplay).toBeUndefined();
+    expect(answeringHostSnapshot.permissions.canSubmitAnswer).toBe(true);
+  });
+
   it("stores websocket tickets and registers authorized connections", async () => {
     const realtimeRepository = new MemoryRealtimeRepository();
     const service = new GameService(new MemoryRoomRepository(), realtimeRepository, new RecordingBroadcaster());

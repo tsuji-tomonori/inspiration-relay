@@ -3,6 +3,7 @@ import { displayPoints } from "@hirameki-relay/game-core";
 import { avatarIds, type AvatarId, type Player, type RoomSnapshot } from "@hirameki-relay/shared";
 import { createRoom, fetchSnapshot, fetchWebSocketTicket, joinRoom, nextRound, skipAnswer, startGame, submitAnswer, submitHint, type SessionTokens } from "./api";
 import { assets } from "./assets";
+import { parseRoomSnapshotUpdatedMessage, resolveWebSocketUrl } from "./websocket";
 
 type ModalMode = "create" | "join" | null;
 
@@ -13,13 +14,6 @@ interface StoredSession {
   playerId: string;
   playerToken: string;
   hostToken?: string;
-}
-
-interface RoomSnapshotUpdatedMessage {
-  type: "room.snapshot.updated";
-  roomId: string;
-  reason: string;
-  occurredAt: string;
 }
 
 export function App() {
@@ -296,7 +290,7 @@ function RoomScreen({ snapshot, session, sortedPlayers, busy, onStart, onSubmitH
 
       <section className="main-panel panel">
         {snapshot.status === "LOBBY" ? (
-          <Lobby snapshot={snapshot} isHost={Boolean(session?.hostToken)} busy={busy} onStart={onStart} />
+          <Lobby snapshot={snapshot} busy={busy} onStart={onStart} />
         ) : snapshot.status === "GAME_RESULT" ? (
           <GameResult players={sortedPlayers} />
         ) : snapshot.round?.status === "HINT_SUBMITTING" ? (
@@ -304,7 +298,7 @@ function RoomScreen({ snapshot, session, sortedPlayers, busy, onStart, onSubmitH
         ) : snapshot.round?.status === "ANSWERING" ? (
           <AnswerScreen snapshot={snapshot} busy={busy} onSubmitAnswer={onSubmitAnswer} onSkip={onSkip} />
         ) : snapshot.round?.status === "ROUND_RESULT" ? (
-          <RoundResult snapshot={snapshot} players={sortedPlayers} isHost={Boolean(session?.hostToken)} busy={busy} onNext={onNext} />
+          <RoundResult snapshot={snapshot} players={sortedPlayers} busy={busy} onNext={onNext} />
         ) : (
           <p className="empty-state">状態を読み込み中です。</p>
         )}
@@ -328,14 +322,14 @@ function RoomScreen({ snapshot, session, sortedPlayers, busy, onStart, onSubmitH
   );
 }
 
-function Lobby({ snapshot, isHost, busy, onStart }: { snapshot: RoomSnapshot; isHost: boolean; busy: boolean; onStart: () => void }) {
+function Lobby({ snapshot, busy, onStart }: { snapshot: RoomSnapshot; busy: boolean; onStart: () => void }) {
   return (
     <div className="lobby">
       <RoomBadge roomId={snapshot.roomId} />
       <img src={assets.pancakes} alt="お題カードの例" className="topic-art" />
       <h1>みんながそろうのを待っています</h1>
       <p>3人以上になったらホストが開始できます。</p>
-      <button className="image-action start" disabled={!isHost || snapshot.players.length < 3 || busy} onClick={onStart}>
+      <button className="image-action start" disabled={!snapshot.permissions.canStartGame || busy} onClick={onStart}>
         <img src={assets.startButton} alt="" aria-hidden="true" />
         <span>ゲーム開始</span>
       </button>
@@ -347,11 +341,11 @@ function HintScreen({ snapshot, busy, onSubmitHint }: { snapshot: RoomSnapshot; 
   const [hint, setHint] = useState("");
   const isAnswerer = snapshot.viewerRole === "answerer";
 
-  if (isAnswerer) {
+  if (!snapshot.permissions.canSubmitHint) {
     return (
       <div className="waiting-screen">
         <img src={assets.chickFlag} alt="" aria-hidden="true" />
-        <h1>みんながヒントを考えています</h1>
+        <h1>{isAnswerer ? "みんながヒントを考えています" : "ほかの人のヒントを待っています"}</h1>
         <p>提出済み {snapshot.submittedHintPlayerIds.length} / {Math.max(0, snapshot.players.length - 1)}</p>
       </div>
     );
@@ -381,16 +375,16 @@ function AnswerScreen({ snapshot, busy, onSubmitAnswer, onSkip }: {
   onSkip: () => void;
 }) {
   const [answer, setAnswer] = useState("");
-  const isAnswerer = snapshot.viewerRole === "answerer" || snapshot.viewerRole === "host";
+  const canSubmitAnswer = snapshot.permissions.canSubmitAnswer;
 
   return (
     <form className="answer-screen" onSubmit={(event) => {
       event.preventDefault();
       onSubmitAnswer(answer);
     }}>
-      <h1>{isAnswerer ? "こたえよう" : "回答を待っています"}</h1>
+      <h1>{canSubmitAnswer ? "こたえよう" : "回答を待っています"}</h1>
       <HintRail hints={snapshot.hints} />
-      {isAnswerer ? (
+      {canSubmitAnswer ? (
         <div className="answer-controls">
           <label>
             こたえ
@@ -404,10 +398,9 @@ function AnswerScreen({ snapshot, busy, onSubmitAnswer, onSkip }: {
   );
 }
 
-function RoundResult({ snapshot, players, isHost, busy, onNext }: {
+function RoundResult({ snapshot, players, busy, onNext }: {
   snapshot: RoomSnapshot;
   players: Player[];
-  isHost: boolean;
   busy: boolean;
   onNext: () => void;
 }) {
@@ -417,7 +410,7 @@ function RoundResult({ snapshot, players, isHost, busy, onNext }: {
       <p className="answer-word">こたえ: {snapshot.round?.topicDisplay}</p>
       <HintRail hints={snapshot.hints} />
       <RankingPreview players={players} />
-      <button className="image-action next" disabled={!isHost || busy} onClick={onNext}>
+      <button className="image-action next" disabled={!snapshot.permissions.canGoNextRound || busy} onClick={onNext}>
         <img src={assets.nextButton} alt="" aria-hidden="true" />
         <span>つぎのラウンドへ</span>
       </button>
@@ -501,34 +494,4 @@ function saveSession(session: StoredSession): void {
 
 function clearSession(): void {
   sessionStorage.removeItem(storageKey);
-}
-
-function resolveWebSocketUrl(wsUrl: string): string {
-  const url = new URL(wsUrl, window.location.href);
-  if (url.protocol === "http:") {
-    url.protocol = "ws:";
-  } else if (url.protocol === "https:") {
-    url.protocol = "wss:";
-  }
-  return url.toString();
-}
-
-function parseRoomSnapshotUpdatedMessage(data: unknown): RoomSnapshotUpdatedMessage | null {
-  if (typeof data !== "string") {
-    return null;
-  }
-  try {
-    const parsed = JSON.parse(data) as Partial<RoomSnapshotUpdatedMessage>;
-    if (parsed.type !== "room.snapshot.updated" || typeof parsed.roomId !== "string") {
-      return null;
-    }
-    return {
-      type: "room.snapshot.updated",
-      roomId: parsed.roomId,
-      reason: typeof parsed.reason === "string" ? parsed.reason : "",
-      occurredAt: typeof parsed.occurredAt === "string" ? parsed.occurredAt : ""
-    };
-  } catch {
-    return null;
-  }
 }

@@ -21,6 +21,7 @@ describe("game-core", () => {
   it("accepts only short hiragana hints and rejects answer words", () => {
     expect(validateHint("あまい", topic, [])).toEqual({ ok: true });
     expect(validateHint("甘い", topic, []).code).toBe("INVALID_HINT");
+    expect(validateHint("フワフワ", topic, []).code).toBe("INVALID_HINT");
     expect(validateHint("ぱんけーき", topic, []).code).toBe("INVALID_HINT");
     expect(validateHint("あまい", topic, [{ hint: "あまい" } as Hint]).code).toBe("DUPLICATE_HINT");
   });
