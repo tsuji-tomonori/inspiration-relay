@@ -1,6 +1,6 @@
 # GitHub Apps 403 時の gh フォールバック完了条件修正
 
-状態: in_progress
+状態: done
 
 タスク種別: 修正
 
@@ -62,11 +62,19 @@ GitHub Apps 優先方針と `gh` フォールバック方針の優先順位・�
 
 ## 受け入れ条件
 
-- [ ] GitHub Apps が `403 Resource not accessible by integration` などで失敗した場合の `gh` フォールバック方針が `AGENTS.md` に明記されている。
-- [ ] `skills/github-apps-pr-operator/SKILL.md` が、`gh` フォールバック成功時は PR 操作完了扱い、両方失敗時のみ blocked と読む内容になっている。
-- [ ] `skills/worktree-task-pr-flow/SKILL.md` または関連 agent prompt が、GitHub Apps 専用完了条件に誤読されない。
-- [ ] `git diff --check` など、変更範囲に対する最小限の検証が実施されている。
-- [ ] 作業完了レポートが `reports/working/` に保存されている。
+- [x] GitHub Apps が `403 Resource not accessible by integration` などで失敗した場合の `gh` フォールバック方針が `AGENTS.md` に明記されている。
+- [x] `skills/github-apps-pr-operator/SKILL.md` が、`gh` フォールバック成功時は PR 操作完了扱い、両方失敗時のみ blocked と読む内容になっている。
+- [x] `skills/worktree-task-pr-flow/SKILL.md` または関連 agent prompt が、GitHub Apps 専用完了条件に誤読されない。
+- [x] `git diff --check` など、変更範囲に対する最小限の検証が実施されている。
+- [x] 作業完了レポートが `reports/working/` に保存されている。
+
+## 完了メモ
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/13
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488484243
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488486395
+- PR 作成は GitHub Apps connector に PR 作成ツールが見つからなかったため `gh pr create` へフォールバックした。
+- PR コメント投稿は GitHub Apps connector が `403 Resource not accessible by integration` で失敗したため `gh pr comment` へフォールバックした。
 
 ## 検証計画
 

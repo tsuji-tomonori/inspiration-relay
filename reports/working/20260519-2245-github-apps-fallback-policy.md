@@ -32,6 +32,8 @@
 - `skills/github-apps-pr-operator/SKILL.md` に、GitHub Apps 失敗時の `gh` フォールバック成功を完了扱いにする条件を明記した。
 - `skills/worktree-task-pr-flow/SKILL.md` に、PR 操作のフォールバック完了条件と task done 判定を追記した。
 - `skills/worktree-task-pr-flow/agents/openai.yaml` と `skills/github-apps-pr-operator/agents/openai.yaml` の prompt を更新した。
+- PR #13 を作成し、受け入れ条件確認コメントとセルフレビューコメントを投稿した。
+- task md を `tasks/done/` へ移動した。
 
 ## 5. 成果物
 
@@ -42,8 +44,9 @@
 | `skills/worktree-task-pr-flow/SKILL.md` | Markdown | worktree flow の PR 完了条件 | R2, R3 |
 | `skills/worktree-task-pr-flow/agents/openai.yaml` | YAML | workflow prompt の完了条件補足 | R3 |
 | `skills/github-apps-pr-operator/agents/openai.yaml` | YAML | GitHub Apps operator prompt の fallback 補足 | R3 |
-| `tasks/do/20260519-2242-github-apps-fallback-policy.md` | Markdown | task md / 受け入れ条件 / RCA | R5 |
+| `tasks/done/20260519-2242-github-apps-fallback-policy.md` | Markdown | task md / 受け入れ条件 / RCA / 完了メモ | R5 |
 | `reports/working/20260519-2245-github-apps-fallback-policy.md` | Markdown | 作業完了レポート | R5 |
+| PR #13 | Pull Request | 変更内容、検証、制約、fallback 理由 | R1, R2, R3 |
 
 ## 6. 指示へのfit評価
 
@@ -68,8 +71,16 @@
 - `git diff --check -- reports/working/20260519-2245-github-apps-fallback-policy.md`: pass
 - `pre-commit run --files reports/working/20260519-2245-github-apps-fallback-policy.md`: pass
 
-## 8. 未対応・制約・リスク
+## 8. PR と GitHub 操作
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/13
+- 受け入れ条件確認コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488484243
+- セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/13#issuecomment-4488486395
+- PR 作成: GitHub Apps connector に PR 作成ツールが見つからなかったため、`gh pr create` にフォールバック。
+- PR コメント投稿: GitHub Apps connector が `403 Resource not accessible by integration` で失敗したため、`gh pr comment` にフォールバック。
+
+## 9. 未対応・制約・リスク
 
 - 専用 worktree は未作成。理由: 修正対象の `AGENTS.md` と `skills/` が現 worktree の未追跡ファイルで、origin/main からの新規 worktree では対象内容を引き継げないため。
-- 既存 worktree には今回触っていない未追跡ファイルが多数あるため、commit / PR 対象に含める場合は今回の対象ファイルだけを stage する必要がある。
+- 既存 worktree には今回触っていない未追跡ファイルが多数ある。今回の commit / PR には対象ファイルのみを含めた。
 - GitHub Apps 自体の権限不足はこの変更では解消しない。今後も 403 が発生する場合は、理由を記録したうえで `gh` フォールバックを使う。
