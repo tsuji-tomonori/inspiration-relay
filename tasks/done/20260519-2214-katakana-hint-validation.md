@@ -1,6 +1,6 @@
 # カタカナヒント拒否テスト追加
 
-状態: in_progress
+状態: done
 
 ## 背景
 
@@ -78,3 +78,16 @@ PR #12 のレビューで、仕様準拠テストとして「お題と一致し�
 ## リスク
 
 - 既存のカタカナヒント受理を前提にした利用者がいた場合、仕様どおり拒否されるようになる。ただし仕様上はひらがな・長音のみが正であるため、意図した修正と判断する。
+
+## 完了結果
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/12
+- レビュー指摘対応コメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/12#issuecomment-4488140460
+- 更新後セルフレビューコメント: https://github.com/tsuji-tomonori/inspiration-relay/pull/12#issuecomment-4488140500
+- 検証:
+  - `npm run test -w @hirameki-relay/game-core`: pass
+  - `npm run test -w @hirameki-relay/api`: fail -> `npm ci` で依存関係を復旧後 pass
+  - `npm run typecheck -w @hirameki-relay/game-core`: pass
+  - `npm run typecheck -w @hirameki-relay/api`: pass
+  - `git diff --check`: pass
+  - `git diff --cached --check`: pass
