@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Apps PR Operator"
+  short_description: "Operate PRs through GitHub Apps first, fall back to gh on integration permission errors, and keep blocked states clear."
+  default_prompt: "Use GitHub Apps before gh for repository PR operations. If GitHub Apps is unavailable, unsupported, or fails with an integration-permission error such as 403 Resource not accessible by integration, use gh as the fallback and record the fallback reason. Create or update PRs, acceptance comments, and self-review comments in Japanese when the workflow calls for them, suppress routine confirmations, and report blocked GitHub steps only when neither GitHub Apps nor gh completes the required operation."
