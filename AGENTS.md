@@ -3,7 +3,9 @@
 このリポジトリで作業する Codex / AI agent は、以下を守る。
 
 ## 共通
-- 指定 skill が利用可能一覧に出ない場合も、リポジトリローカルの明示ルールとして該当 `SKILL.md` を読む。
+- 指定 skill が利用可能一覧に出ない場合も、リポジトリローカルの明示ルールとして該当 `SKILL.md` が存在するなら読む。
+- `必読`、`推奨`、`適用` と書かれた repo-local skill 参照でも、該当 `SKILL.md` が現在の checkout に存在しない場合は、その不在だけを理由に blocked にしない。存在しない skill 名・path・代替した判断を作業レポート、PR 本文、または最終回答に記録し、`AGENTS.md`、利用可能な skill、開発者指示で続行する。
+- `AGENTS.md` から新たに repo-local skill を必須参照する変更を行う場合は、同じ PR で該当 `SKILL.md` を追加するか、不在時の代替手順を同じ箇所に明記する。
 - `git diff`、`git status`、変更ファイル一覧、ステージ済み差分、PR 内容、作業レポートから文面を作る場合も該当 skill を適用する。
 - `reports/working/*.md`、`reports/bugs/*.md`、同等の作業・障害レポートが関係する場合は本文を確認し、commit message / PR 本文に要点を反映する。
 - 実施していないテスト、確認、検証を実施済みとして書かない。

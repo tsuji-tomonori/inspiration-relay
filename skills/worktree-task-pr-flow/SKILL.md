@@ -13,6 +13,8 @@ Do not force the full workflow for pure question answering, plan-only requests, 
 
 ## Required Workflow
 
+If a referenced repository-local skill path does not exist in the current checkout, do not stop solely because of that missing file. Record the missing skill path and the fallback judgment in the task file, work report, PR text, or final response, then continue with this skill, `AGENTS.md`, available skills, and developer instructions. When adding a new mandatory repo-local skill reference, include that `SKILL.md` in the same PR or document the fallback behavior next to the reference.
+
 1. Understand the request before editing.
    - Identify deliverables, validations, and risks.
    - Classify the task before implementation as exactly one primary `タスク種別`: `機能追加`, `修正`, `調査`, or `ドキュメント更新`.

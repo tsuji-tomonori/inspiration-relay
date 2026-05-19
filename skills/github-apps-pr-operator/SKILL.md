@@ -11,6 +11,8 @@ Also use it when the user mentions GitHubApps, GitHub Apps, PR 作成, PR コメ
 
 ## Required Pairings
 
+If a paired repository-local skill path is missing from the current checkout, do not treat the PR operation as blocked for that reason alone. Record the missing path and continue with this skill, `AGENTS.md`, available skills, and developer instructions. If a future change makes a paired skill truly mandatory, add that `SKILL.md` in the same PR or document the fallback behavior next to the reference.
+
 - For repository work that changes files, use `skills/worktree-task-pr-flow/SKILL.md`.
 - For Japanese PR titles, bodies, and comments, use `skills/japanese-pr-title-comment/SKILL.md`.
 - For PR self-review comments, use `skills/pr-review-self-review/SKILL.md`.

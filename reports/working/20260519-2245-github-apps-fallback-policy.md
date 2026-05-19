@@ -34,6 +34,7 @@
 - `skills/worktree-task-pr-flow/agents/openai.yaml` と `skills/github-apps-pr-operator/agents/openai.yaml` の prompt を更新した。
 - PR #13 を作成し、受け入れ条件確認コメントとセルフレビューコメントを投稿した。
 - task md を `tasks/done/` へ移動した。
+- blocking 指摘 1 に対応し、存在しない repo-local skill 参照を通常作業の blocked 理由にしない availability rule を追加した。
 
 ## 5. 成果物
 
@@ -47,6 +48,7 @@
 | `tasks/done/20260519-2242-github-apps-fallback-policy.md` | Markdown | task md / 受け入れ条件 / RCA / 完了メモ | R5 |
 | `reports/working/20260519-2245-github-apps-fallback-policy.md` | Markdown | 作業完了レポート | R5 |
 | PR #13 | Pull Request | 変更内容、検証、制約、fallback 理由 | R1, R2, R3 |
+| `tasks/do/20260519-2314-skill-reference-availability.md` | Markdown | blocking 指摘対応 task md | 追加指摘対応 |
 
 ## 6. 指示へのfit評価
 
@@ -70,6 +72,10 @@
 - `pre-commit run --files AGENTS.md skills/github-apps-pr-operator/SKILL.md skills/worktree-task-pr-flow/SKILL.md skills/worktree-task-pr-flow/agents/openai.yaml skills/github-apps-pr-operator/agents/openai.yaml tasks/do/20260519-2242-github-apps-fallback-policy.md`: pass
 - `git diff --check -- reports/working/20260519-2245-github-apps-fallback-policy.md`: pass
 - `pre-commit run --files reports/working/20260519-2245-github-apps-fallback-policy.md`: pass
+- `git diff --name-status origin/main...HEAD`: pass。PR #13 で tracked skill が 2 系統のみであることを確認
+- `git diff --check -- AGENTS.md skills/worktree-task-pr-flow/SKILL.md skills/github-apps-pr-operator/SKILL.md reports/working/20260519-2245-github-apps-fallback-policy.md tasks/do/20260519-2314-skill-reference-availability.md`: pass
+- `pre-commit run --files AGENTS.md skills/worktree-task-pr-flow/SKILL.md skills/github-apps-pr-operator/SKILL.md reports/working/20260519-2245-github-apps-fallback-policy.md tasks/do/20260519-2314-skill-reference-availability.md`: pass
+- `ruby -e '... frontmatter ...' skills/github-apps-pr-operator/SKILL.md skills/worktree-task-pr-flow/SKILL.md`: pass
 
 ## 8. PR と GitHub 操作
 
@@ -84,3 +90,4 @@
 - 専用 worktree は未作成。理由: 修正対象の `AGENTS.md` と `skills/` が現 worktree の未追跡ファイルで、origin/main からの新規 worktree では対象内容を引き継げないため。
 - 既存 worktree には今回触っていない未追跡ファイルが多数ある。今回の commit / PR には対象ファイルのみを含めた。
 - GitHub Apps 自体の権限不足はこの変更では解消しない。今後も 403 が発生する場合は、理由を記録したうえで `gh` フォールバックを使う。
+- missing repo-local skill は内容を適用できないため、作業レポート・PR 本文・コメントで不在と代替判断を記録する必要がある。
