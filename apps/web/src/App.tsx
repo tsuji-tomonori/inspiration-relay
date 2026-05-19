@@ -3,6 +3,7 @@ import { displayPoints } from "@hirameki-relay/game-core";
 import { avatarIds, type AvatarId, type Player, type RoomSnapshot } from "@hirameki-relay/shared";
 import { createRoom, fetchSnapshot, fetchWebSocketTicket, joinRoom, nextRound, skipAnswer, startGame, submitAnswer, submitHint, type SessionTokens } from "./api";
 import { assets } from "./assets";
+import { parseRoomSnapshotUpdatedMessage, resolveWebSocketUrl } from "./websocket";
 
 type ModalMode = "create" | "join" | null;
 
@@ -13,13 +14,6 @@ interface StoredSession {
   playerId: string;
   playerToken: string;
   hostToken?: string;
-}
-
-interface RoomSnapshotUpdatedMessage {
-  type: "room.snapshot.updated";
-  roomId: string;
-  reason: string;
-  occurredAt: string;
 }
 
 export function App() {
@@ -500,34 +494,4 @@ function saveSession(session: StoredSession): void {
 
 function clearSession(): void {
   sessionStorage.removeItem(storageKey);
-}
-
-function resolveWebSocketUrl(wsUrl: string): string {
-  const url = new URL(wsUrl, window.location.href);
-  if (url.protocol === "http:") {
-    url.protocol = "ws:";
-  } else if (url.protocol === "https:") {
-    url.protocol = "wss:";
-  }
-  return url.toString();
-}
-
-function parseRoomSnapshotUpdatedMessage(data: unknown): RoomSnapshotUpdatedMessage | null {
-  if (typeof data !== "string") {
-    return null;
-  }
-  try {
-    const parsed = JSON.parse(data) as Partial<RoomSnapshotUpdatedMessage>;
-    if (parsed.type !== "room.snapshot.updated" || typeof parsed.roomId !== "string") {
-      return null;
-    }
-    return {
-      type: "room.snapshot.updated",
-      roomId: parsed.roomId,
-      reason: typeof parsed.reason === "string" ? parsed.reason : "",
-      occurredAt: typeof parsed.occurredAt === "string" ? parsed.occurredAt : ""
-    };
-  } catch {
-    return null;
-  }
 }
