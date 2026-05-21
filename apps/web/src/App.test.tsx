@@ -1,4 +1,5 @@
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import type { RoomSnapshot } from "@hirameki-relay/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
@@ -152,6 +153,61 @@ describe("App WebSocket synchronization", () => {
     expect(await screen.findByText("お題: パンケーキ")).toBeInTheDocument();
     expect(screen.queryByText("みんながそろうのを待っています")).not.toBeInTheDocument();
   });
+
+  it("ホストは3人目参加のWebSocket通知後に開始ボタンが有効になり、Host tokenでstartする", async () => {
+    const user = userEvent.setup();
+    sessionStorage.setItem(storageKey, JSON.stringify({
+      roomId: "ABCD12",
+      playerId: "p1",
+      playerToken: "host-player-token",
+      hostToken: "host-token"
+    }));
+    apiMocks.fetchSnapshot
+      .mockResolvedValueOnce(lobbySnapshot({ viewerPlayerId: "p1", playerCount: 2, canStartGame: false }))
+      .mockResolvedValueOnce(lobbySnapshot({ viewerPlayerId: "p1", playerCount: 2, canStartGame: false }))
+      .mockResolvedValueOnce(lobbySnapshot({ viewerPlayerId: "p1", playerCount: 3, canStartGame: true }));
+    apiMocks.startGame.mockResolvedValue(hintSubmittingSnapshot({ viewerPlayerId: "p1" }));
+
+    render(<App />);
+
+    const startButton = await screen.findByRole("button", { name: "ゲーム開始" });
+    expect(startButton).toBeDisabled();
+    const socket = await waitForSocket();
+
+    socket.open();
+    await waitFor(() => expect(apiMocks.fetchSnapshot).toHaveBeenCalledTimes(2));
+    expect(startButton).toBeDisabled();
+
+    socket.message(JSON.stringify({
+      type: "room.snapshot.updated",
+      roomId: "ABCD12",
+      reason: "player.joined",
+      occurredAt: "2026-05-17T00:00:00.000Z"
+    }));
+
+    await waitFor(() => expect(startButton).toBeEnabled());
+    await user.click(startButton);
+
+    expect(apiMocks.startGame).toHaveBeenCalledWith("ABCD12", "host-token");
+  });
+
+  it("canStartGameがtrueでもsessionにhostTokenがなければ開始ボタンを無効にする", async () => {
+    sessionStorage.setItem(storageKey, JSON.stringify({
+      roomId: "ABCD12",
+      playerId: "p1",
+      playerToken: "host-player-token"
+    }));
+    apiMocks.fetchSnapshot.mockResolvedValue(lobbySnapshot({
+      viewerPlayerId: "p1",
+      playerCount: 3,
+      canStartGame: true
+    }));
+
+    render(<App />);
+
+    expect(await screen.findByRole("button", { name: "ゲーム開始" })).toBeDisabled();
+    expect(apiMocks.startGame).not.toHaveBeenCalled();
+  });
 });
 
 async function waitForSocket(): Promise<MockWebSocket> {
@@ -159,7 +215,8 @@ async function waitForSocket(): Promise<MockWebSocket> {
   return MockWebSocket.instances[0]!;
 }
 
-function lobbySnapshot(): RoomSnapshot {
+function lobbySnapshot(options: { viewerPlayerId?: string; playerCount?: number; canStartGame?: boolean } = {}): RoomSnapshot {
+  const viewerPlayerId = options.viewerPlayerId ?? "p2";
   return {
     roomId: "ABCD12",
     status: "LOBBY",
@@ -171,14 +228,14 @@ function lobbySnapshot(): RoomSnapshot {
       roundMode: "ONE_ANSWERER_PER_PLAYER"
     },
     currentRoundNo: 0,
-    players: players(),
+    players: players(options.playerCount ?? 3),
     round: null,
     hints: [],
     submittedHintPlayerIds: [],
-    viewerPlayerId: "p2",
+    viewerPlayerId,
     viewerRole: "hinter",
     permissions: {
-      canStartGame: false,
+      canStartGame: options.canStartGame ?? false,
       canGoNextRound: false,
       canSubmitAnswer: false,
       canSubmitHint: false
@@ -186,9 +243,9 @@ function lobbySnapshot(): RoomSnapshot {
   };
 }
 
-function hintSubmittingSnapshot(): RoomSnapshot {
+function hintSubmittingSnapshot(options: { viewerPlayerId?: string } = {}): RoomSnapshot {
   return {
-    ...lobbySnapshot(),
+    ...lobbySnapshot({ viewerPlayerId: options.viewerPlayerId }),
     status: "IN_GAME",
     currentRoundNo: 1,
     round: {
@@ -212,12 +269,12 @@ function hintSubmittingSnapshot(): RoomSnapshot {
   };
 }
 
-function players(): RoomSnapshot["players"] {
+function players(count = 3): RoomSnapshot["players"] {
   return [
     player("p1", "ホスト", true, "2026-05-17T00:00:00.000Z"),
     player("p2", "ゲスト1", false, "2026-05-17T00:00:01.000Z"),
     player("p3", "ゲスト2", false, "2026-05-17T00:00:02.000Z")
-  ];
+  ].slice(0, count);
 }
 
 function player(playerId: string, nickname: string, isHost: boolean, joinedAt: string): RoomSnapshot["players"][number] {

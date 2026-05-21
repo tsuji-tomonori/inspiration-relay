@@ -128,6 +128,19 @@ export function App() {
     setError(null);
   }
 
+  const canStartGameFromClient = Boolean(snapshot?.permissions.canStartGame && session?.hostToken);
+
+  const handleStart = () => {
+    if (!snapshot) {
+      return;
+    }
+    if (!session?.hostToken) {
+      setError("ホスト権限が失われました。トップへ戻ってルームを作り直してください。");
+      return;
+    }
+    void run(() => startGame(snapshot.roomId, session.hostToken!));
+  };
+
   return (
     <main className="app">
       <div className="sparkle-layer" aria-hidden="true" />
@@ -146,10 +159,10 @@ export function App() {
       ) : (
         <RoomScreen
           snapshot={snapshot}
-          session={session}
           sortedPlayers={sortedPlayers}
           busy={busy}
-          onStart={() => session?.hostToken ? run(() => startGame(snapshot.roomId, session.hostToken!)) : setError("ホスト権限がありません")}
+          canStartGame={canStartGameFromClient}
+          onStart={handleStart}
           onSubmitHint={(hint) => session ? run(() => submitHint(snapshot.roomId, snapshot.round!.roundNo, session.playerToken, hint)) : undefined}
           onSubmitAnswer={(answer) => session ? run(() => submitAnswer(snapshot.roomId, snapshot.round!.roundNo, session.playerToken, answer)) : undefined}
           onSkip={() => session ? run(() => skipAnswer(snapshot.roomId, snapshot.round!.roundNo, session.playerToken)) : undefined}
@@ -258,11 +271,11 @@ function EntryModal({ mode, busy, onClose, onSubmit }: {
   );
 }
 
-function RoomScreen({ snapshot, session, sortedPlayers, busy, onStart, onSubmitHint, onSubmitAnswer, onSkip, onNext }: {
+function RoomScreen({ snapshot, sortedPlayers, busy, canStartGame, onStart, onSubmitHint, onSubmitAnswer, onSkip, onNext }: {
   snapshot: RoomSnapshot;
-  session: StoredSession | null;
   sortedPlayers: Player[];
   busy: boolean;
+  canStartGame: boolean;
   onStart: () => void;
   onSubmitHint: (hint: string) => void;
   onSubmitAnswer: (answer: string) => void;
@@ -290,7 +303,7 @@ function RoomScreen({ snapshot, session, sortedPlayers, busy, onStart, onSubmitH
 
       <section className="main-panel panel">
         {snapshot.status === "LOBBY" ? (
-          <Lobby snapshot={snapshot} busy={busy} onStart={onStart} />
+          <Lobby snapshot={snapshot} busy={busy} canStartGame={canStartGame} onStart={onStart} />
         ) : snapshot.status === "GAME_RESULT" ? (
           <GameResult players={sortedPlayers} />
         ) : snapshot.round?.status === "HINT_SUBMITTING" ? (
@@ -322,14 +335,14 @@ function RoomScreen({ snapshot, session, sortedPlayers, busy, onStart, onSubmitH
   );
 }
 
-function Lobby({ snapshot, busy, onStart }: { snapshot: RoomSnapshot; busy: boolean; onStart: () => void }) {
+function Lobby({ snapshot, busy, canStartGame, onStart }: { snapshot: RoomSnapshot; busy: boolean; canStartGame: boolean; onStart: () => void }) {
   return (
     <div className="lobby">
       <RoomBadge roomId={snapshot.roomId} />
       <img src={assets.pancakes} alt="お題カードの例" className="topic-art" />
       <h1>みんながそろうのを待っています</h1>
       <p>3人以上になったらホストが開始できます。</p>
-      <button className="image-action start" disabled={!snapshot.permissions.canStartGame || busy} onClick={onStart}>
+      <button className="image-action start" disabled={!canStartGame || busy} onClick={onStart}>
         <img src={assets.startButton} alt="" aria-hidden="true" />
         <span>ゲーム開始</span>
       </button>
