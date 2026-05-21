@@ -31,7 +31,7 @@ npm run dev:api
 npm run dev:web
 ```
 
-The web app runs on `http://localhost:5173` and proxies `/api` to the Hono API on `http://localhost:8787`.
+The web app runs on `http://localhost:5173` and proxies `/api` plus `/ws` to the local API endpoint on `http://localhost:8787`.
 
 ## Validation
 

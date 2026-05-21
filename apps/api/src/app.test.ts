@@ -44,6 +44,74 @@ describe("api", () => {
     expect(joined.snapshot.players).toHaveLength(2);
   });
 
+  it("3人そろったルームはHost tokenでPOST /startできる", async () => {
+    const app = createApp(new GameService(new MemoryRoomRepository()));
+    const createResponse = await app.request("/api/v1/rooms", {
+      method: "POST",
+      body: JSON.stringify({ nickname: "さくら", avatarId: "rabbit" }),
+      headers: { "Content-Type": "application/json" }
+    });
+    const created = await createResponse.json();
+
+    await app.request(`/api/v1/rooms/${created.roomId}/join`, {
+      method: "POST",
+      body: JSON.stringify({ nickname: "ぺんたろう", avatarId: "penguin" }),
+      headers: { "Content-Type": "application/json" }
+    });
+    await app.request(`/api/v1/rooms/${created.roomId}/join`, {
+      method: "POST",
+      body: JSON.stringify({ nickname: "ひよこ", avatarId: "chick" }),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    const response = await app.request(`/api/v1/rooms/${created.roomId}/start`, {
+      method: "POST",
+      headers: {
+        Authorization: `Host ${created.hostToken}`
+      }
+    });
+
+    expect(response.status).toBe(200);
+    const snapshot = await response.json();
+    expect(snapshot.status).toBe("IN_GAME");
+    expect(snapshot.round?.status).toBe("HINT_SUBMITTING");
+  });
+
+  it("3人そろっていてもGuest tokenではPOST /startできない", async () => {
+    const app = createApp(new GameService(new MemoryRoomRepository()));
+    const createResponse = await app.request("/api/v1/rooms", {
+      method: "POST",
+      body: JSON.stringify({ nickname: "さくら", avatarId: "rabbit" }),
+      headers: { "Content-Type": "application/json" }
+    });
+    const created = await createResponse.json();
+    const joinResponse = await app.request(`/api/v1/rooms/${created.roomId}/join`, {
+      method: "POST",
+      body: JSON.stringify({ nickname: "ぺんたろう", avatarId: "penguin" }),
+      headers: { "Content-Type": "application/json" }
+    });
+    const joined = await joinResponse.json();
+    await app.request(`/api/v1/rooms/${created.roomId}/join`, {
+      method: "POST",
+      body: JSON.stringify({ nickname: "ひよこ", avatarId: "chick" }),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    const response = await app.request(`/api/v1/rooms/${created.roomId}/start`, {
+      method: "POST",
+      headers: {
+        Authorization: `Guest ${joined.playerToken}`
+      }
+    });
+
+    expect(response.status).toBe(403);
+    await expect(response.json()).resolves.toMatchObject({
+      error: {
+        code: "HOST_ONLY"
+      }
+    });
+  });
+
   it("notifies the room when a player joins", async () => {
     const broadcaster = new RecordingBroadcaster();
     const service = new GameService(new MemoryRoomRepository(), new MemoryRealtimeRepository(), broadcaster);

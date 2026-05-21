@@ -192,3 +192,40 @@ describe("GameService.startGame", () => {
     } satisfies Partial<ApiError>);
   });
 });
+
+describe("GameService.snapshot start permission", () => {
+  it("3人目参加後、ホストのsnapshotでcanStartGameがtrueになる", async () => {
+    const repository = new MemoryRoomRepository();
+    const service = new GameService(repository, new MemoryRealtimeRepository(), new RecordingBroadcaster());
+    const host = await service.createRoom({ nickname: "さくら", avatarId: "rabbit" });
+
+    await service.joinRoom(host.roomId, { nickname: "ぺんたろう", avatarId: "penguin" });
+
+    let snapshot = await service.snapshot(host.roomId, host.playerToken);
+    expect(snapshot.players).toHaveLength(2);
+    expect(snapshot.permissions.canStartGame).toBe(false);
+
+    await service.joinRoom(host.roomId, { nickname: "ひよこ", avatarId: "chick" });
+
+    snapshot = await service.snapshot(host.roomId, host.playerToken);
+    expect(snapshot.players).toHaveLength(3);
+    expect(snapshot.hostPlayerId).toBe(host.playerId);
+    expect(snapshot.viewerPlayerId).toBe(host.playerId);
+    expect(snapshot.permissions.canStartGame).toBe(true);
+  });
+
+  it("3人いても非ホストのsnapshotではcanStartGameがfalseになる", async () => {
+    const repository = new MemoryRoomRepository();
+    const service = new GameService(repository, new MemoryRealtimeRepository(), new RecordingBroadcaster());
+    const host = await service.createRoom({ nickname: "さくら", avatarId: "rabbit" });
+    const guest = await service.joinRoom(host.roomId, { nickname: "ぺんたろう", avatarId: "penguin" });
+
+    await service.joinRoom(host.roomId, { nickname: "ひよこ", avatarId: "chick" });
+
+    const snapshot = await service.snapshot(host.roomId, guest.playerToken);
+    expect(snapshot.players).toHaveLength(3);
+    expect(snapshot.hostPlayerId).toBe(host.playerId);
+    expect(snapshot.viewerPlayerId).toBe(guest.playerId);
+    expect(snapshot.permissions.canStartGame).toBe(false);
+  });
+});

@@ -49,6 +49,20 @@ describe("parseRoomSnapshotUpdatedMessage", () => {
     }))?.reason).toBe("round.result");
   });
 
+  it("player.joined理由のroom.snapshot.updatedをparseする", () => {
+    expect(parseRoomSnapshotUpdatedMessage(JSON.stringify({
+      type: "room.snapshot.updated",
+      roomId: "ABCD12",
+      reason: "player.joined",
+      occurredAt: "2026-05-17T00:00:00.000Z"
+    }))).toEqual({
+      type: "room.snapshot.updated",
+      roomId: "ABCD12",
+      reason: "player.joined",
+      occurredAt: "2026-05-17T00:00:00.000Z"
+    });
+  });
+
   it("JSONではないdataはnullを返す", () => {
     expect(parseRoomSnapshotUpdatedMessage("not json")).toBeNull();
   });
