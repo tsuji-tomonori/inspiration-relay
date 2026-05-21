@@ -1,6 +1,6 @@
 # 3人目参加後の開始ボタン有効化と hostToken 条件修正
 
-状態: in_progress
+状態: done
 
 ## 背景
 
@@ -95,3 +95,10 @@
 - `npm run typecheck -w @hirameki-relay/api`: pass。
 - `npm run build -w @hirameki-relay/web`: pass。
 - `git diff --check`: pass。
+
+## PR 操作
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/14
+- PR 作成: GitHub Apps に PR 作成ツールが無かったため `gh pr create` にフォールバック。
+- 受け入れ条件コメント: GitHub Apps が `403 Resource not accessible by integration` のため `gh pr comment` にフォールバック。
+- セルフレビューコメント: 受け入れ条件コメントと同じ理由で `gh pr comment` にフォールバック。

@@ -77,3 +77,10 @@
 - 実ブラウザでの複数クライアント WebSocket 実走行確認は未実施。単体テストと build/typecheck での検証に留めた。
 - `npm ci` 後に npm audit が moderate 6 件を報告したが、今回の修正範囲外のため依存更新は行っていない。
 - `skills/nazenaze-analysis/SKILL.md` など複数の AGENTS.md 参照 skill は現 checkout に存在しなかったため、代替判断を task md に記録して続行した。
+
+## 9. PR 操作
+
+- PR: https://github.com/tsuji-tomonori/inspiration-relay/pull/14
+- PR 作成: GitHub Apps に PR 作成ツールが無かったため、`gh pr create` にフォールバックした。
+- 受け入れ条件コメント: GitHub Apps が `403 Resource not accessible by integration` のため、`gh pr comment` にフォールバックした。
+- セルフレビューコメント: 受け入れ条件コメントと同じ理由で、`gh pr comment` にフォールバックした。
