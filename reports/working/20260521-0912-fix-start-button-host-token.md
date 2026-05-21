@@ -46,6 +46,7 @@
 | `apps/api/src/service.test.ts` | Vitest | snapshot 権限判定テスト | R5 |
 | `apps/api/src/app.test.ts` | Vitest | `/start` Host/Guest token 認可テスト | R5 |
 | `apps/web/vite.config.ts` / `README.md` | 設定/Markdown | `/ws` dev proxy と説明更新 | R6 |
+| `docs/infra/resource-inventory.json` / `docs/infra/resource-inventory.md` | generated docs | Web build asset hash 変更に伴う infra docs 更新 | CI docs check |
 | `tasks/do/20260521-0907-fix-start-button-host-token.md` | Markdown | 受け入れ条件、RCA、検証記録 | AGENTS.md |
 
 ## 6. 指示へのfit評価
@@ -70,6 +71,8 @@
 - `npm run typecheck -w @hirameki-relay/web`: pass。
 - `npm run typecheck -w @hirameki-relay/api`: pass。
 - `npm run build -w @hirameki-relay/web`: pass。
+- `npm run docs:infra`: pass。CI の `docs:infra:check` 失敗を受けて生成物を更新。
+- `npm run docs:check`: pass。
 - `git diff --check`: pass。
 
 ## 8. 未対応・制約・リスク
@@ -84,3 +87,4 @@
 - PR 作成: GitHub Apps に PR 作成ツールが無かったため、`gh pr create` にフォールバックした。
 - 受け入れ条件コメント: GitHub Apps が `403 Resource not accessible by integration` のため、`gh pr comment` にフォールバックした。
 - セルフレビューコメント: 受け入れ条件コメントと同じ理由で、`gh pr comment` にフォールバックした。
+- CI: 初回は generated infra docs stale のため失敗。`npm run docs:infra` で `docs/infra/resource-inventory.*` を更新し、`npm run docs:check` pass を確認した。

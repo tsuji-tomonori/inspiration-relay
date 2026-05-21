@@ -94,6 +94,8 @@
 - `npm run typecheck -w @hirameki-relay/web`: pass。
 - `npm run typecheck -w @hirameki-relay/api`: pass。
 - `npm run build -w @hirameki-relay/web`: pass。
+- `npm run docs:infra`: pass。CI の `docs:infra:check` 失敗を受けて生成物を更新。
+- `npm run docs:check`: pass。
 - `git diff --check`: pass。
 
 ## PR 操作
@@ -102,3 +104,4 @@
 - PR 作成: GitHub Apps に PR 作成ツールが無かったため `gh pr create` にフォールバック。
 - 受け入れ条件コメント: GitHub Apps が `403 Resource not accessible by integration` のため `gh pr comment` にフォールバック。
 - セルフレビューコメント: 受け入れ条件コメントと同じ理由で `gh pr comment` にフォールバック。
+- CI: 初回は generated infra docs stale のため失敗。`npm run docs:infra` で `docs/infra/resource-inventory.*` を更新し、`npm run docs:check` pass を確認。
